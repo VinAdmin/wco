@@ -1,0 +1,19 @@
+{
+    "name": "vinadmin/wco",
+    "description": "Web optimization coding framework",
+    "type": "library",
+    "license": "free",
+    "autoload": {
+        "psr-4": {
+            "WCO\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Vitaliy Olkhin",
+            "email": "ovvitalik@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
