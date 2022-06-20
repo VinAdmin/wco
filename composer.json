@@ -1,11 +1,12 @@
 {
     "name": "vinadmin/wco",
     "description": "Web optimization coding framework",
+    "homepage": "https://www.texnoblog.uz/",
     "type": "library",
     "license": "free",
     "autoload": {
         "psr-4": {
-            "WCO\\": "src/"
+            "wco\\": ""
         }
     },
     "authors": [
@@ -14,6 +15,6 @@
             "email": "ovvitalik@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {}
 }
