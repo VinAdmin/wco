@@ -7,10 +7,10 @@
  * @author     Ольхин Виталий <volkhin@texnoblog.uz>
  * @copyright  (C) 2021
  */
-namespace vadc\kernel;
+namespace wco\kernel;
 
-use vadc\kernel\Heder;
-use vadc\kernel\Roles;
+use wco\kernel\Heder;
+use wco\kernel\WCO;
 
 class View extends Heder
 {
@@ -25,7 +25,7 @@ class View extends Heder
     {
         global $template;
         
-        include_once docroot().'/template/'. \vadc::$config['template'].'/main.php';
+        include_once dirname(WCO::$doc_root).'/domain/'.WCO::gatDomainAlias(WCO::$domain).'/views/main.php';
     }
 
     function generate($template_view, $array = null)
@@ -34,31 +34,12 @@ class View extends Heder
             extract($array);
         }
         ob_start();
-        include_once(docroot().'/views'.$template_view);
+        include_once(dirname(WCO::$doc_root).'/domain/'.WCO::gatDomainAlias(WCO::$domain).'/views'.$template_view);
+        //include_once('/var/www/wco-full/domain/wco.loc/views/index/index.php');
         $this->views = ob_get_contents();
         ob_end_clean();
 
         $this->Main();
-    }
-    
-    /**
-     * Выводит контет по уникальному ключу $content_id из БД.
-     * @param string $content_id
-     * @return type
-     */
-    public function Content(string $content_id)
-    {
-        $content = DB::connect()
-                ->prepare("SELECT text, content_id FROM content"
-                        . " WHERE content_id = :content_id");
-        $content->execute(['content_id' => $content_id]);
-        $res_content = $content->fetch(\PDO::FETCH_ASSOC);
-        $content = null;
-        $str_content = $res_content['text'];
-        if(Roles::setAcces('admin')){
-            $str_content .= "<div><a href=\"/content/editor/?content_id=".$res_content['content_id']."\">Редактировать</a></div>";
-        }
-        return $str_content;
     }
 }
 ?>

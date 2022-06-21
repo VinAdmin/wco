@@ -7,8 +7,9 @@
  * @author     Ольхин Виталий <volkhin@texnoblog.uz>
  * @copyright  (C) 2019
  */
-namespace vadc\kernel;
+namespace wco\kernel;
 use app\Assets\AssetsCite;
+use wco\kernel\WCO;
 
 class Heder
 {
@@ -37,13 +38,13 @@ class Heder
         echo '<title>'. $this->title.'</title>'.PHP_EOL;
         echo "\t\t".'<meta name="description" content="'.$this->description.'">'.PHP_EOL;
         echo "\t\t".'<meta name="keywords" content="'.$this->keywords.'">'.PHP_EOL;
-        echo "\t\t<link data-vue-meta=\"ssr\" href=\"". \vadc::$config['protocol']
+        echo "\t\t<link data-vue-meta=\"ssr\" href=\"". WCO::$config['protocol']
             .filter_input(INPUT_SERVER, 'SERVER_NAME')
             .filter_input(INPUT_SERVER, 'REQUEST_URI')
             ."\" rel=\"canonical\" data-vmid=\"canonical\">".PHP_EOL;
-        if(isset(\vadc::$config['site_name'])){
+        if(isset(WCO::$config['site_name'])){
             echo "\t\t<meta data-vue-meta=\"ssr\" property=\"og:site_name\" "
-                . "content=\"".\vadc::$config['site_name']."\" data-vmid=\"og:site_name\">".PHP_EOL;
+                . "content=\"".\WCO::$config['site_name']."\" data-vmid=\"og:site_name\">".PHP_EOL;
         }
         echo "\t\t<meta data-vue-meta=\"ssr\" property=\"og:title\" "
             . "content=\"".$this->title."\" data-vmid=\"og:title\">".PHP_EOL;
@@ -53,7 +54,7 @@ class Heder
             echo "\t\t<meta data-vue-meta=\"ssr\" name=\"twitter:description\" "
                 . "content=\"".$this->description."\" data-vmid=\"twitter:description\">".PHP_EOL;
         }
-        echo "\t\t".\vadc::getHeder();
+        echo "\t\t".WCO::getHeder();
     }
 }
 ?>

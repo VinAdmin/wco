@@ -22,6 +22,7 @@ class WCO
     public static $config = [];
     public static $config_db = [];
     public static $domain = 'default';
+    public static $doc_root = null;
 
     public function __construct() 
     {
@@ -36,6 +37,7 @@ class WCO
         $docRoot = $_SERVER['DOCUMENT_ROOT'].'/';
         $template = 'template/';
         //$this->AutUser();
+        self::$doc_root = strip_tags(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT'));
     }
     
     private function LoadConfig() {
@@ -246,7 +248,11 @@ class WCO
         }
     }
     
-    static function gatDomainAlias($domain) {
-        return self::$config['domain_alias'][$domain];
+    static function gatDomainAlias($domain = null) {
+        if(!isset(self::$config['domain_alias'][$domain])){
+            return self::$config['domain_alias']['default'] = 'default';
+        }else{
+            return self::$config['domain_alias'][$domain];
+        }
     }
 }

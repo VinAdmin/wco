@@ -8,8 +8,8 @@
  * @copyright  (C) 2019
  */
 
-namespace vadc\kernel;
-use vadc\kernel\View;
+namespace wco\kernel;
+use wco\kernel\View;
 
 class Controller extends View{
     protected function FilteringFields($filter) {
