@@ -174,7 +174,7 @@ class WCO
      * @return string
      */
     static public function getBodyEnd() {
-        $str = null;
+        $str = "\n";
         if(isset(self::$file['css']['end'])){
             foreach (self::$file['css']['end'] as $row_css){
                 $str .= "<link rel=\"stylesheet\" href=\"".$row_css."\">".PHP_EOL;

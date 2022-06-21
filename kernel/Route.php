@@ -28,6 +28,11 @@ class Route
     function __construct() {
         $this->Filtr();
         $this->getUri();
+        
+        $domain_confug = dirname($this->docRoot) . "/domain/".WCO::gatDomainAlias(WCO::$domain)."/config.php";
+        if(file_exists($domain_confug)){
+            include_once $domain_confug;
+        }
     }
 
     /**
