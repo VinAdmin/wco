@@ -23,6 +23,7 @@ class WCO
     public static $config_db = [];
     public static $domain = 'default';
     public static $doc_root = null;
+    static $request_uri = null;
 
     public function __construct() 
     {
@@ -32,12 +33,10 @@ class WCO
             Debugger::$strictMode = true; // display all errors
             Debugger::$strictMode = E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED; // all errors except deprecated notices
         }
-        //var_dump($_SERVER);
+        
         self::$domain = filter_input(INPUT_SERVER, 'HTTP_HOST');
-        $docRoot = $_SERVER['DOCUMENT_ROOT'].'/';
-        $template = 'template/';
-        //$this->AutUser();
         self::$doc_root = strip_tags(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT'));
+        self::$request_uri = strip_tags(filter_input(INPUT_SERVER, 'REQUEST_URI'));
     }
     
     private function LoadConfig() {

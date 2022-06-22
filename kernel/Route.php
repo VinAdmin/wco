@@ -24,6 +24,7 @@ class Route
     private $getOption = null;
     private $getAction = null;
     private $controller_path = null;
+    private const CONTROLLER_DEFAULT = 'SiteController';
             
     function __construct() {
         $this->Filtr();
@@ -47,7 +48,10 @@ class Route
         }
         
         // подцепляем файл с классом контроллера
-        $this->controller_path = dirname($this->docRoot) . "/domain/".WCO::gatDomainAlias(WCO::$domain)."/controllers/" . $this->controller_name.'.php';
+        $this->controller_path = dirname($this->docRoot) . "/domain/" 
+                . WCO::gatDomainAlias(WCO::$domain) . "/controllers/" 
+                . $this->controller_name.'.php';
+        $this->LoadModules();
         
         //для отладки
         //echo $this->controller_path;
@@ -62,6 +66,7 @@ class Route
         // создаем контроллер
         $controller = new $this->controller_name;
         $action = 'action'. $this->action_name;
+        //var_dump($action);
         if(method_exists($controller, $action)){
             // вызываем действие контроллера
             $controller->$action();
@@ -136,5 +141,48 @@ class Route
             $auth = true;
         }
         return $auth;
+    }
+    
+    /**
+     * Подключение модуля к пути контроллера.
+     * @return string
+     */
+    private function LoadModules() {
+        //Проверяем ключ массива.
+        if(isset(WCO::$config['modules'][self::ParserUriModules()])){
+            $modules = dirname($this->docRoot) . "/domain/" 
+                    . WCO::gatDomainAlias(WCO::$domain) . '/' 
+                    . WCO::$config['modules'][self::ParserUriModules()] . "/controllers/" 
+                    . $this->controller_name.'.php';
+            if(file_exists($modules)){
+                $this->controller_path = $modules;
+            }else{
+                $this->controller_path = dirname($this->docRoot) . "/domain/" 
+                        . WCO::gatDomainAlias(WCO::$domain) . '/' 
+                        . WCO::$config['modules'][self::ParserUriModules()] 
+                        . "/controllers/" . self::CONTROLLER_DEFAULT . '.php';
+                $this->controller_name = self::CONTROLLER_DEFAULT;
+            }
+            //var_dump($this->controller_path);
+            return $modules;
+        }
+        return false;
+    }
+    
+    /**
+     * Порсер ищит прервый параметр из адресной сторики и возвращает его результат.
+     * 
+     * @return string Если результат ложный возвращает 0.
+     */
+    static function ParserUriModules() {
+        if(WCO::$request_uri){
+            $uri = preg_split('/\/|\?/', WCO::$request_uri);
+            //var_dump($uri);
+            if(isset($uri[1])){
+                return $uri[1];
+            }
+        }
+        
+        return 0;
     }
 }

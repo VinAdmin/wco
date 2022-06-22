@@ -5,7 +5,7 @@
  * @package    Vadc
  * @subpackage View
  * @author     Ольхин Виталий <volkhin@texnoblog.uz>
- * @copyright  (C) 2021
+ * @copyright  (C) 2022
  */
 namespace wco\kernel;
 
@@ -15,6 +15,12 @@ use wco\kernel\WCO;
 class View extends Heder
 {
     public $views;
+    private $path_to_domain = null;
+    
+    function __construct() {
+        $this->path_to_domain = dirname(WCO::$doc_root) . '/domain/' 
+                . WCO::gatDomainAlias(WCO::$domain);
+    }
 
     /**
      * Подключение главного шаблона.
@@ -23,9 +29,15 @@ class View extends Heder
      */
     protected function Main()
     {
-        global $template;
+        $layout =  $this->path_to_domain . '/views/main.php';
+        //Подгруджаем представление из модуля
+        if(Route::ParserUriModules()){
+            $layout = dirname(WCO::$doc_root) . '/domain/' 
+                    . WCO::gatDomainAlias(WCO::$domain) 
+                    . '/modules/' . Route::ParserUriModules() . '/views/main.php';
+        }
         
-        include_once dirname(WCO::$doc_root).'/domain/'.WCO::gatDomainAlias(WCO::$domain).'/views/main.php';
+        include_once($layout);
     }
 
     function generate($template_view, $array = null)
@@ -34,8 +46,11 @@ class View extends Heder
             extract($array);
         }
         ob_start();
-        include_once(dirname(WCO::$doc_root).'/domain/'.WCO::gatDomainAlias(WCO::$domain).'/views'.$template_view);
-        //include_once('/var/www/wco-full/domain/wco.loc/views/index/index.php');
+        $views = $this->path_to_domain . '/views' . $template_view;
+        if(Route::ParserUriModules()){
+            $views = $this->path_to_domain . '/modules/' . Route::ParserUriModules() . '/views' . $template_view;
+        }
+        include_once($views);
         $this->views = ob_get_contents();
         ob_end_clean();
 
