@@ -1,10 +1,10 @@
 <?php
 namespace wco\db;
 
-use vadc\kernel\Model\ModelSelect;
-use vadc\kernel\Model\ModelInsert;
-use vadc\kernel\Model\ModelDelete;
-use vadc\kernel\Model\ModelUpdate;
+use wco\db\Model\ModelSelect;
+use wco\db\Model\ModelInsert;
+use wco\db\Model\ModelDelete;
+use wco\db\Model\ModelUpdate;
 
 /**
  * Библиотека по упрощению работы с PDO
@@ -28,9 +28,11 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
     public function init() {
         return null;
     }
-    
+        
     /**
      * Собирает запрос SELECT
+     * @param string $param
+     * @return ModelSelect
      */
     public function select($param = null) {
         $this->modelSelect->select($param);

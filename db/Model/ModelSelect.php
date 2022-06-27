@@ -1,7 +1,7 @@
 <?php
-namespace wco\dc\Model;
+namespace wco\db\Model;
 
-use wco\dc\Assembly;
+use wco\db\Assembly;
 
 /**
  * Description of ModelSelect
