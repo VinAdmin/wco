@@ -6,7 +6,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "wco\\kernel\\": "kernel"
+            "wco\\kernel\\": "kernel/",
+            "wco\\db\\": "db/DB.php"
         }
     },
     "authors": [
