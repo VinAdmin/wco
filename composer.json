@@ -16,5 +16,6 @@
         }
     ],
     "minimum-stability": "dev",
+    "virsion": "0.0.1",
     "require": {}
 }
