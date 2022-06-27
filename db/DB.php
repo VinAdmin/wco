@@ -1,33 +1,28 @@
 <?php
-namespace vadc\kernel;
+namespace vco\db;
 
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\Sql\Sql;
-use Laminas\Db\Adapter\Adapter AS Lam;
-use Laminas\Db\Sql\Sql AS SqlLam;
 /**
  * Описание класса: Класс подключение к базе данных.
  *
- * @package    Access
- * @subpackage DB
  * @author     Ольхин Виталий <volkhin@texnoblog.uz>
- * @copyright  (C) 2016-2021
- * @version 0.1
+ * @copyright  (C) 2022
  * 
- * @property class $_cache Psr16Adapter
  */
-class DB extends \vadc\kernel\GenerateSql{
-    const VERSION = '0.1';
+class DB extends \vco\db\GenerateSql{
     private static $_dbname = null;
     private $sql = null;
     public $test = 123;
+    static $config = array();
             
     function __construct() {
-        //self::$_dbname = $config_db['mysql']['db_name'];
         parent::__construct();
     }
-
-    public static function connect(){
+    
+    public function LoadConfug() {
+        
+    }
+    
+    public static function connect($connect_db){
         global $config_db;
 
         try{
@@ -75,39 +70,6 @@ class DB extends \vadc\kernel\GenerateSql{
         self::connect()->beginTransaction();
         
         return self::connect()->lastInsertId("id");
-    }
-    /**
-    public static function ZendConnect(){
-        global $config_db;
-        $adapter = new Adapter([
-            'driver'   => 'Mysqli',
-            'hostname' => $config_db['mysql']['host'],
-            'database' => $config_db['mysql']['db_name'],
-            'username' => $config_db['mysql']['login'],
-            'password' => $config_db['mysql']['passwor'],
-        ]);
-        $sql = new Sql($adapter);
-        return $sql;
-    }*/
-    public static function LaminasConnect(){
-        global $config_db;
-        $adapter = new Lam([
-            'driver'   => 'Mysqli',
-            'hostname' => \vadc::$config_db['mysql']['host'],
-            'database' => \vadc::$config_db['mysql']['db_name'],
-            'username' => \vadc::$config_db['mysql']['login'],
-            'password' => \vadc::$config_db['mysql']['passwor'],
-        ]);
-        $sql = new SqlLam($adapter);
-        return $adapter;
-    }
-//    
-//    public function sqlString() {
-//        return $this->toString;
-//    }
-    
-    static function Lamf($name) {
-        return DB::LaminasConnect()->driver->formatParameterName($name);
     }
 }
 ?>

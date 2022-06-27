@@ -6,7 +6,8 @@
     "license": "free",
     "autoload": {
         "psr-4": {
-            "wco\\": ""
+            "wco\\": "kernel/",
+            "wco\\db\\": "db/DB.php"
         }
     },
     "authors": [
@@ -16,5 +17,6 @@
         }
     ],
     "minimum-stability": "dev",
+    "virsion": "0.0.1",
     "require": {}
 }
