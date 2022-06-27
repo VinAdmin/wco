@@ -12,14 +12,24 @@ class DB extends \vco\db\GenerateSql{
     private static $_dbname = null;
     private $sql = null;
     public $test = 123;
-    static $config = array();
+    static $config_db = array();
             
     function __construct() {
         parent::__construct();
     }
     
     public function LoadConfug() {
+        $dir = '../';
+        //Подключение основных файлов ядра
+        $config_file = $dir.'config/db.php';
         
+        if(!file_exists($config_file)){
+            throw new \Exception('Не удалось найти файл конфигураций к подключению базе данных ' .$config_file);
+        }else{
+            include_once($config_file); //файл конфигурацый
+        }
+        
+        self::$config_db = $config_db;
     }
     
     public static function connect($connect_db){
