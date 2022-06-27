@@ -3,7 +3,7 @@
     "description": "Web optimization coding framework",
     "homepage": "https://www.texnoblog.uz/",
     "type": "library",
-    "license": "free",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "wco\\": "kernel/",
