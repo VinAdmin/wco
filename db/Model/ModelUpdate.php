@@ -1,5 +1,5 @@
 <?php
-namespace vadc\kernel\Model;
+namespace wco\db\Model;
 
 /**
  * Description of ModelUpdate

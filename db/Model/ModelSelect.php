@@ -1,7 +1,7 @@
 <?php
-namespace vadc\kernel\Model;
+namespace wco\dc\Model;
 
-use vadc\kernel\Assembly;
+use wco\dc\Assembly;
 
 /**
  * Description of ModelSelect

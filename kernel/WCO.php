@@ -48,15 +48,7 @@ class WCO
             throw new \Exception('Не удалось найти файл конфигураций ' .$config_file);
         }else{
             include_once($config_file); //файл конфигурацый
-        }
-        
-        $config_file_db = $dir.'config/db.php';
-        if(!file_exists($config_file_db)){
-            //throw new \Exception('Не удалось найти файл конфигураций ' .$config_file);
-        }else{
-            include_once($config_file_db); //конфиг подключения к бд
-        }
-        
+        }        
         self::$config = $config;
     }
 

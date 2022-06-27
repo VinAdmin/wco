@@ -1,5 +1,5 @@
 <?php
-namespace vadc\kernel;
+namespace wco\db;
 
 /**
  * Абстрактный класс принимает и возвращает собранную строку.

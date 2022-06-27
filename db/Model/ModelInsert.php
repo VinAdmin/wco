@@ -1,7 +1,7 @@
 <?php
-namespace vadc\kernel\Model;
+namespace wco\db\Model;
 
-use vadc\kernel\Assembly;
+use wco\db\Assembly;
 
 /**
  * Класс подготавливает запрос для добавления записи в таблицу

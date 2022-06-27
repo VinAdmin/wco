@@ -1,5 +1,5 @@
 <?php
-namespace vco\db;
+namespace wco\db;
 
 /**
  * Описание класса: Класс подключение к базе данных.
@@ -8,49 +8,56 @@ namespace vco\db;
  * @copyright  (C) 2022
  * 
  */
-class DB extends \vco\db\GenerateSql{
+class DB extends \wco\db\GenerateSql{
     private static $_dbname = null;
     private $sql = null;
     public $test = 123;
-    static $config_db = array();
+    static $config_db;
             
     function __construct() {
         parent::__construct();
     }
     
-    public function LoadConfug() {
+    private static function LoadConfug() {
         $dir = '../';
         //Подключение основных файлов ядра
-        $config_file = $dir.'config/db.php';
+        $config_file_db = $dir.'config/db.php';
         
-        if(!file_exists($config_file)){
-            throw new \Exception('Не удалось найти файл конфигураций к подключению базе данных ' .$config_file);
+        if(!file_exists($config_file_db)){
+            throw new \Exception('Не удалось найти файл конфигураций к подключению базе данных ' .$config_file_db);
         }else{
-            include_once($config_file); //файл конфигурацый
+            include_once($config_file_db); //файл конфигурацый
+            self::$config_db = $config_db;
         }
-        
-        self::$config_db = $config_db;
     }
     
-    public static function connect($connect_db){
-        global $config_db;
-
+    public static function connect($connect_db = null){
+        self::LoadConfug();
+        
+        if(is_null($connect_db)){
+            $connect_db = 'default';
+        }
+        
         try{
-            //return new \PDO("odbc:Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=".$config_db['dbfile'].";Uid=;Pwd=".$config_db['password'].";");
-            if(is_array(\vadc::$config_db['mysql'])){
-                $pdo = new \PDO("mysql:dbname=" . \vadc::$config_db['mysql']['db_name'].";"
-                        .\vadc::$config_db['mysql']['host'], 
-                        \vadc::$config_db['mysql']['login'], 
-                        \vadc::$config_db['mysql']['passwor']);
+            if(!isset(self::$config_db[$connect_db])){
+                throw new \Exception('Не правильное подключение к БД');
+            }
+            
+            if(self::$config_db[$connect_db]['db'] == 'mysql'){
+                $pdo = new \PDO("mysql:dbname=" . self::$config_db[$connect_db]['db_name'].";"
+                    . self::$config_db[$connect_db]['host'], 
+                        self::$config_db[$connect_db]['login'], 
+                        self::$config_db[$connect_db]['password']);
                 $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-                return $pdo;
-            }else{
-                $pdo = new \PDO("sqlite:" . \vadc::$config_db['dbfile']);
+            }
+            
+            if(self::$config_db[$connect_db]['db'] == 'sqlite'){
+                $pdo = new \PDO("sqlite:" . self::$config_db[$connect_db]);
                 $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
                 $pdo->exec('PRAGMA foreign_keys=ON');
-                //$pdo->beginTransaction();
-                return $pdo;
             }
+            
+            return $pdo;
         }
         catch(PDOException $e){
             $MessageConnect = '<div>Отсуствует подключени</div>';

@@ -1,8 +1,7 @@
 <?php
-namespace vadc\kernel;
+namespace wco\db;
 
 use vadc\kernel\Model\ModelSelect;
-use vadc\kernel\Assembly;
 use vadc\kernel\Model\ModelInsert;
 use vadc\kernel\Model\ModelDelete;
 use vadc\kernel\Model\ModelUpdate;

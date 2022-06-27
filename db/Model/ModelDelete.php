@@ -1,12 +1,12 @@
 <?php
-namespace vadc\kernel\Model;
+namespace wco\db\Model;
 
 /**
  * Description of ModelDelete
  *
  * @author vinamin
  */
-class ModelDelete extends \vadc\kernel\Assembly{
+class ModelDelete extends wco\db\Assembly{
     public function setTable(string $where = null, string $table) {
         $sql = 'DELETE FROM '.$table.' ';
         if(!empty($where)){
