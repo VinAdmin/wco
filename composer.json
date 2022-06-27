@@ -6,7 +6,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "wco\\": "kernel"
+            "wco\\": "/kernel/"
         }
     },
     "authors": [
@@ -16,6 +16,6 @@
         }
     ],
     "minimum-stability": "dev",
-    "virsion": "2.1.2",
+    "virsion": "0.0.1",
     "require": {}
 }
