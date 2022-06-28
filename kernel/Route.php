@@ -8,7 +8,7 @@ use wco\kernel\WCO;
  * 
  * @author     Ольхин Виталий <volkhin@texnoblog.uz, ovvitalik@gmail.com>
  * @link       http://texnoblog.uz/
- * @copyright  (C) 2020
+ * @copyright  (C) 2022
  * @access public
  * @property string $controller_name Контроллер и действие по умолчанию
  * @property string $action_name Экшен по умолчанию
@@ -25,6 +25,7 @@ class Route
     private $getAction = null;
     private $controller_path = null;
     private const CONTROLLER_DEFAULT = 'SiteController';
+    public static $link_document = null;
             
     function __construct() {
         $this->Filtr();
@@ -43,6 +44,7 @@ class Route
     {
         if($this->DefaultPageAuth() || $this->Api()){
             $this->controller_name = ucfirst($this->controller_name);
+            //var_dump($this->controller_name);
         } else {
             $this->action_name = 'aut';
         }
@@ -51,6 +53,9 @@ class Route
         $this->controller_path = dirname($this->docRoot) . "/domain/" 
                 . WCO::gatDomainAlias(WCO::$domain) . "/controllers/" 
                 . $this->controller_name.'.php';
+        //Путь подключения корню директории модулей сайта.
+        self::$link_document = dirname($this->docRoot) . "/domain/" 
+                    . WCO::gatDomainAlias(WCO::$domain) . '/';
         $this->LoadModules();
         
         //для отладки
@@ -93,6 +98,7 @@ class Route
      * Получает адрес и обрабатывает запросы для перенаправления.
      */
     private function getUri() {
+        $key_action = null;
         (string)$uri = \strip_tags($this->serverUri); $pos = [];
         preg_match('(%27)',$uri,$pos);
         if($pos == true){
@@ -100,12 +106,22 @@ class Route
             exit;
         } $arr_uri = [];
         if(\preg_match_all('#/([a-z]+)#su', $uri, $arr_uri)){
-            //var_dump($arr_uri);
-            $controller = ($arr_uri[1][0] != 'index') ? $arr_uri[1][0] : null;
+            //var_dump();exit();
+            if(!$this->LoadModules(self::ParserUriModules())){
+                $controller = ($arr_uri[1][0] != 'index') ? $arr_uri[1][0] : null;
+                $key_action = 1;
+            }
+            if(isset($arr_uri[1][1])){
+                $controller = ($arr_uri[1][1] != 'index') ? $arr_uri[1][1] : null;
+                $key_action = 2;
+            }
         }else{ $controller = 'Site'; }
         //Если существует массив
-        if(isset($arr_uri[1][1])){ $action = end($arr_uri[1]); }
+        if(isset($arr_uri[1][$key_action])){
+            $action = end($arr_uri[1]);
+        }
         //Если не пуст получаем имя контроллера
+        //var_dump($controller);
         if(!empty($controller)){
             $this->controller_name = !empty($this->getOption) ? strip_tags($this->getOption) 
                     . 'Controller' : $controller.'Controller';
@@ -114,6 +130,7 @@ class Route
         if (!empty($action) || !empty($this->getAction)){
             $this->action_name = !empty($this->getAction) ? strip_tags($this->getAction) : $action;
         }
+        //var_dump($this->action_name);
     }
     
     private function Filtr() {
@@ -148,22 +165,31 @@ class Route
      * @return string
      */
     private function LoadModules() {
+        //Доступ к контролеру ядра.
+        WCO::$config['modules']['wco'] = 'vendor/vinadmin/wco';
         //Проверяем ключ массива.
         if(isset(WCO::$config['modules'][self::ParserUriModules()])){
-            $modules = dirname($this->docRoot) . "/domain/" 
+            if(self::ParserUriModules() == 'wco'){
+                self::$link_document = dirname($this->docRoot) .'/'. WCO::$config['modules'][self::ParserUriModules()];
+                $modules = self::$link_document . '/controllers/' . $this->controller_name.'.php';
+                $this->controller_path = $modules;
+                //var_dump($modules);
+                return $modules;
+            }
+            self::$link_document = dirname($this->docRoot) . "/domain/" 
                     . WCO::gatDomainAlias(WCO::$domain) . '/' 
-                    . WCO::$config['modules'][self::ParserUriModules()] . "/controllers/" 
+                    . WCO::$config['modules'][self::ParserUriModules()];
+            
+            $modules = self::$link_document . "/controllers/" 
                     . $this->controller_name.'.php';
             if(file_exists($modules)){
                 $this->controller_path = $modules;
             }else{
-                $this->controller_path = dirname($this->docRoot) . "/domain/" 
-                        . WCO::gatDomainAlias(WCO::$domain) . '/' 
-                        . WCO::$config['modules'][self::ParserUriModules()] 
+                $this->controller_path = self::$link_document
                         . "/controllers/" . self::CONTROLLER_DEFAULT . '.php';
                 $this->controller_name = self::CONTROLLER_DEFAULT;
             }
-            //var_dump($this->controller_path);
+            var_dump($this->controller_path);exit();
             return $modules;
         }
         return false;

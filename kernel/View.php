@@ -29,13 +29,7 @@ class View extends Heder
      */
     protected function Main()
     {
-        $layout =  $this->path_to_domain . '/views/main.php';
-        //Подгруджаем представление из модуля
-        if(Route::ParserUriModules()){
-            $layout = dirname(WCO::$doc_root) . '/domain/' 
-                    . WCO::gatDomainAlias(WCO::$domain) 
-                    . '/modules/' . Route::ParserUriModules() . '/views/main.php';
-        }
+        $layout = Route::$link_document . '/views/main.php';
         
         include_once($layout);
     }
@@ -46,10 +40,7 @@ class View extends Heder
             extract($array);
         }
         ob_start();
-        $views = $this->path_to_domain . '/views' . $template_view;
-        if(Route::ParserUriModules()){
-            $views = $this->path_to_domain . '/modules/' . Route::ParserUriModules() . '/views' . $template_view;
-        }
+        $views = Route::$link_document . '/views' . $template_view;
         include_once($views);
         $this->views = ob_get_contents();
         ob_end_clean();
