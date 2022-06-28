@@ -18,5 +18,7 @@
     ],
     "minimum-stability": "dev",
     "virsion": "0.0.1",
-    "require": {}
+    "require": {
+    	"php": ">=7.3"
+    }
 }
