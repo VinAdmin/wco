@@ -173,7 +173,7 @@ class WCO
         }
         if(isset(self::$file['js']['end'])){
             foreach (self::$file['js']['end'] as $row_js){
-                $str .= "\t<script src=\"".$row_js."\"></script>".PHP_EOL;
+                $str .= "\t\t<script src=\"".$row_js."\"></script>".PHP_EOL;
             }
         }
         return $str;
@@ -190,9 +190,9 @@ class WCO
                 $str .= "<link rel=\"stylesheet\" href=\"".$row_css."\">".PHP_EOL;
             }
         }
-        if(isset(self::$file['js']['end'])){
-            foreach (self::$file['js']['end'] as $row_js){
-                $str .= "\t<script src=\"".$row_js."\"></script>".PHP_EOL;
+        if(isset(self::$file['js']['head'])){
+            foreach (self::$file['js']['head'] as $row_js){
+                $str .= "\t\t<script src=\"".$row_js."\"></script>".PHP_EOL;
             }
         }
         return $str;
