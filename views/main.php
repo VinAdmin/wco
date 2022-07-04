@@ -32,10 +32,7 @@ use wco\kernel\WCO;
                                     <a class="nav-link active" href="<?=WCO::Url('/wco/doc/')?>">Документация</a>
                                 </li>
                                 <li class="nav-item">
-                                  <a class="nav-link" href="#">Ссылка</a>
-                                </li>
-                                <li class="nav-item">
-                                  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Отключенная</a>
+                                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Отключенная</a>
                                 </li>
                             </ul>
                         </div>

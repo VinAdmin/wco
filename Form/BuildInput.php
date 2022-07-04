@@ -1,5 +1,5 @@
 <?php
-namespace wco\kernel\Form;
+namespace wco\forms;
 
 class BuildInput{
     private $input = null;

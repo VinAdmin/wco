@@ -1,10 +1,18 @@
 <?php
-namespace vadc\kernel;
+namespace wco\forms;
 
-use vadc\kernel\Form\BuildInput;
+use wco\forms\BuildInput;
 
+/**
+ * Класс генерации форм.
+ * @property string INPUT_TEXT type="text"
+ * @property string INPUT_SUBMIT type="submit"
+ */
 class Form {
-    public function FormStart(string $name = 'new_form',string $method = 'get', $action,$autocomplete = 'on',array $options=array()) {
+    const INPUT_TEXT = 'text';
+    const INPUT_SUBMIT = 'submit';
+
+    public function FormStart(string $name = 'new_form',string $method = 'get', $action = null,$autocomplete = 'on',array $options=array()) {
         $class = $this->Class($options,null);
         $form = '<form name="'.$name.'" id="'.$name.'" method="'.$method.'" action="'.$action.'" autocomplete="'.$autocomplete.'" '
                 . 'class="'.$class.'">';

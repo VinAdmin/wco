@@ -5,4 +5,8 @@ class DocController extends \wco\kernel\Controller{
         $this->generate('/index/index.php');
         return true;
     }
+    public function actionForms() {
+        $this->generate('/index/forms.php');
+        return true;
+    }
 }
