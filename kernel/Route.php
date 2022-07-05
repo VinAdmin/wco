@@ -60,13 +60,19 @@ class Route
         
         //для отладки
         //echo $this->controller_path;
-        
+        //echo $this->controller_name;
+        //exit();
         //Проверка контроллера
         if(file_exists($this->controller_path)){
             include_once $this->controller_path;
         }
         else{
-            Route::ErrorPage404(1);
+            /**
+             * Если не один контроллер не найден попатка подгрузить контроллер 
+             * по по умолчанию.
+             */
+            $this->ControllerDefaulLoadAction();
+            include_once $this->controller_path;
         }
         // создаем контроллер
         $controller = new $this->controller_name;
@@ -193,6 +199,20 @@ class Route
             return $modules;
         }
         return false;
+    }
+    
+    /**
+     * Используем контролле по умолчанию и загружаем полученый контроллер вместо 
+     * экшена.
+     * 
+     * @return null
+     */
+    private function ControllerDefaulLoadAction() {
+        $this->controller_path = self::$link_document
+                        . "/controllers/" . self::CONTROLLER_DEFAULT . '.php';
+        $this->action_name = str_replace('Controller', '', $this->controller_name);
+        $this->controller_name = self::CONTROLLER_DEFAULT;
+        return null;
     }
     
     /**
