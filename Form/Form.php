@@ -154,4 +154,15 @@ class Form {
     public function FormEnd(){
         return '</form>';
     }
+    
+    /**
+     * Кнопка.
+     * @param string $type
+     * @param string $text
+     * @return string
+     */
+    public function Button($type, $text) {
+        $btn = '<button type="' . $type . '">'.$text.'</button>';
+        return $btn;
+    }
 }
