@@ -55,7 +55,7 @@ class Route
                 . $this->controller_name.'.php';
         //Путь подключения корню директории модулей сайта.
         self::$link_document = dirname($this->docRoot) . "/domain/" 
-                    . WCO::gatDomainAlias(WCO::$domain) . '/';
+                    . WCO::gatDomainAlias(WCO::$domain);
         $this->LoadModules();
         
         //для отладки
