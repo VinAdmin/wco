@@ -18,7 +18,7 @@ class View extends Heder
     private $path_to_domain = null;
     
     function __construct() {
-        $this->path_to_domain = dirname(WCO::$doc_root) . '/domain/' 
+        $this->path_to_domain = dirname(WCO::$doc_root) . '/domain' 
                 . WCO::gatDomainAlias(WCO::$domain);
     }
 
