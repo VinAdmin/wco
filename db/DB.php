@@ -19,7 +19,12 @@ class DB extends \wco\db\GenerateSql{
     }
     
     private static function LoadConfug() {
-        $dir = dirname(__FILE__, 5) . "/";
+        if(!isset(\wco\kernel\WCO::$config['kernel_debug'])){
+            $dir = dirname(__FILE__, 5) . "/";
+        }else{
+            $dir = '../';
+        }
+        
         //Подключение основных файлов ядра
         $config_file_db = $dir.'config/db.php';
         
@@ -29,6 +34,7 @@ class DB extends \wco\db\GenerateSql{
             include_once($config_file_db); //файл конфигурацый
             self::$config_db = $config_db;
         }
+        //var_dump(self::$config_db); exit();
     }
     
     public static function connect($connect_db = null){
