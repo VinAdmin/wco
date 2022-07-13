@@ -19,7 +19,7 @@ class DB extends \wco\db\GenerateSql{
     }
     
     private static function LoadConfug() {
-        $dir = '../';
+        $dir = dirname(__FILE__, 5) . "/";
         //Подключение основных файлов ядра
         $config_file_db = $dir.'config/db.php';
         
