@@ -27,7 +27,7 @@ class DB extends \wco\db\GenerateSql{
             throw new \Exception('Не удалось найти файл конфигураций к подключению базе данных ' .$config_file_db);
         }else{
             include_once($config_file_db); //файл конфигурацый
-            self::$config_db = $config_file_db;
+            self::$config_db = $config_db;
             var_dump($config_file_db);exit();
         }
     }
