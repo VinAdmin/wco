@@ -12,43 +12,44 @@ class DB extends \wco\db\GenerateSql{
     private static $_dbname = null;
     private $sql = null;
     public $test = 123;
-    static $config_db;
+    static $config_db = array();
+    private $config_file_db;
             
     function __construct() {
         parent::__construct();
     }
     
-    private static function LoadConfug() {
-        if(!isset(\wco\kernel\WCO::$config['kernel_debug'])){
-            $dir = dirname(__FILE__, 5) . "/";
+    public function LoadConfug() {
+        if(isset(\wco\kernel\WCO::$config['kernel_debug'])){
+            $dir = dirname(filter_input(INPUT_SERVER, 'SCRIPT_NAME'), 2) . "/";
         }else{
-            $dir = '../';
+            $dir = dirname(filter_input(INPUT_SERVER, 'SCRIPT_FILENAME'), 2)  . "/";
         }
-        
         //Подключение основных файлов ядра
-        $config_file_db = $dir.'config/db.php';
+        $this->config_file_db = $dir.'config/db.php';
         
-        if(!file_exists($config_file_db)){
-            throw new \Exception('Не удалось найти файл конфигураций к подключению базе данных ' .$config_file_db);
-        }else{
-            include_once($config_file_db); //файл конфигурацый
-            self::$config_db = $config_db;
+        if(isset(\wco\kernel\WCO::$config['kernel_debug'])){
+            if(!file_exists($this->config_file_db)){
+                throw new \Exception('Не удалось найти файл конфигураций к подключению базе данных ' .$config_file_db);
+            }
         }
-        //var_dump(self::$config_db); exit();
+        include_once($this->config_file_db); //файл конфигурацый
+        
+        self::$config_db = $config_db;
+        
     }
     
     public static function connect($connect_db = null){
-        self::LoadConfug();
-        
         if(is_null($connect_db)){
             $connect_db = 'default';
         }
         
+        if(!isset(self::$config_db[$connect_db])){
+            var_dump(self::$config_db);
+            throw new \Exception('Не правильное указано подключение к БД');
+        }
+        
         try{
-            if(!isset(self::$config_db[$connect_db])){
-                throw new \Exception('Не правильное подключение к БД');
-            }
-            
             if(self::$config_db[$connect_db]['db'] == 'mysql'){
                 $pdo = new \PDO("mysql:host=".self::$config_db[$connect_db]['host'].";dbname=".self::$config_db[$connect_db]['db_name'], 
                         self::$config_db[$connect_db]['login'], 
