@@ -44,8 +44,7 @@ class DB extends \wco\db\GenerateSql{
             }
             
             if(self::$config_db[$connect_db]['db'] == 'mysql'){
-                $pdo = new \PDO("mysql:dbname=" . self::$config_db[$connect_db]['db_name'].";"
-                    . self::$config_db[$connect_db]['host'], 
+                $pdo = new \PDO("mysql:host=".self::$config_db[$connect_db]['host'].";dbname=".self::$config_db[$connect_db]['db_name'], 
                         self::$config_db[$connect_db]['login'], 
                         self::$config_db[$connect_db]['password']);
                 $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
