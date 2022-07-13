@@ -28,6 +28,7 @@ class DB extends \wco\db\GenerateSql{
         }else{
             include_once($config_file_db); //файл конфигурацый
             self::$config_db = $config_file_db;
+            var_dump($config_file_db);exit();
         }
     }
     
