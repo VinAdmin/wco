@@ -1,5 +1,5 @@
 <?php
-namespace vadc\kernel;
+namespace wco\kernel;
 
 /**
  * Description of Date
