@@ -129,6 +129,7 @@ class ModelSelect extends Assembly{
         self::$where = null;
         self::$group_by = null;
         self::$joinLeft = null;
+        self::$limit = null;
     }
     
     function __destruct() {
