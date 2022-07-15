@@ -14,6 +14,7 @@ class DB extends \wco\db\GenerateSql{
     public $test = 123;
     static $config_db = array();
     private $config_file_db;
+    static $connect_type_db;
             
     function __construct() {
         parent::__construct();
@@ -41,23 +42,27 @@ class DB extends \wco\db\GenerateSql{
     
     public static function connect($connect_db = null){
         if(is_null($connect_db)){
-            $connect_db = 'default';
+            self::$connect_type_db = 'default';
+        }else{
+            self::$connect_type_db = $connect_db;
         }
         
-        if(!isset(self::$config_db[$connect_db])){
-            var_dump(self::$config_db);
+        if(!isset(self::$config_db[self::$connect_type_db])){
+            //var_dump(self::$config_db);
             throw new \Exception('Не правильное указано подключение к БД');
         }
         
         try{
-            if(self::$config_db[$connect_db]['db'] == 'mysql'){
-                $pdo = new \PDO("mysql:host=".self::$config_db[$connect_db]['host'].";dbname=".self::$config_db[$connect_db]['db_name'], 
-                        self::$config_db[$connect_db]['login'], 
-                        self::$config_db[$connect_db]['password']);
+            if(self::$config_db[self::$connect_type_db]['db'] == 'mysql'){
+                $pdo = new \PDO("mysql:host=".self::$config_db[self::$connect_type_db]['host'].";"
+                        . "dbname=".self::$config_db[self::$connect_type_db]['db_name'], 
+                        self::$config_db[self::$connect_type_db]['login'], 
+                        self::$config_db[self::$connect_type_db]['password']);
                 $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             }
             
-            if(self::$config_db[$connect_db]['db'] == 'sqlite'){
+            //sqli
+            if(self::$config_db[self::$connect_type_db]['db'] == 'sqlite'){
                 $pdo = new \PDO("sqlite:" . self::$config_db[$connect_db]);
                 $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
                 $pdo->exec('PRAGMA foreign_keys=ON');
