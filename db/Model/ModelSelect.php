@@ -130,6 +130,7 @@ class ModelSelect extends Assembly{
         self::$group_by = null;
         self::$joinLeft = null;
         self::$limit = null;
+        self::$order_by = null;
     }
     
     function __destruct() {
