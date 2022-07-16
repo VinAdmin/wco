@@ -6,7 +6,7 @@ namespace wco\db\Model;
  *
  * @author vinamin
  */
-class ModelUpdate extends \vadc\kernel\Assembly{
+class ModelUpdate extends \wco\db\Assembly{
     private static $table = null;
     private static $set = null;
     private static $where = null;
