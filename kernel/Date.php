@@ -15,7 +15,7 @@ class Date {
     }
     
     static public function DateTime() {
-        return date('Y-m-d h:m:s');
+        return date('Y-m-d H:i:s');
     }
     
     static public function Format($date) {
