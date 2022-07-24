@@ -195,7 +195,7 @@ class Route
                         . "/controllers/" . self::CONTROLLER_DEFAULT . '.php';
                 $this->controller_name = self::CONTROLLER_DEFAULT;
             }
-            var_dump($this->controller_path);exit();
+            //var_dump($this->controller_path);exit();
             return $modules;
         }
         return false;
