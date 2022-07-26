@@ -218,34 +218,15 @@ class WCO
     }
     
     /**
-     * Запуск роутера
+     * Запуск роутера и сессиии
+     * 
      * @return type
      */
     public function RunKernel() {
+        session_start();
+        new Access();
         $rout = new Route();
         return $rout->run();
-    }
-    
-    /**
-     * Функуия авторизауия пользователя. Добавлена 01.05.2022.
-     */
-    private function AutUser() {
-        $logout = strip_tags(filter_input(INPUT_GET, 'logout'));
-        $usetAut = new User();
-        //Завершение сесии при выходе из профиля
-        if(isset($_GET['logout'])){
-            $usetAut->LogOut();
-        }
-        if(isset($_SESSION['user'])){
-            self::$user_id = $_SESSION['user']['id'];
-        }
-        //Если пользователь авторизировался впускаем на сайт.
-        if(isset(self::User()['id'])){
-            $user_online = new UserOnline();//Время пробывания пользователя насайте
-            if($user_online->Time(vadc::User()['id']) < time()){
-                $user_online->UpdateTime($_SESSION['user']['id']);
-            }
-        }
     }
     
     static function gatDomainAlias($domain = null) {
