@@ -203,8 +203,6 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
         $insert->InsertToUpdate($table, $param, $key);
         
         try{
-            var_dump(self::getAssembly());
-            var_dump($insert->par);
             $prepare = DB::connect()->prepare(self::getAssembly());
             $prepare->execute($insert->par);
             $prepare = null;
