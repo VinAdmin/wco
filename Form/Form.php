@@ -75,6 +75,7 @@ class Form {
         $textarea = '<textarea name="'.$name.'" '
                 . 'class="'.$this->Class($options).'" '
                 . $this->maxlength($options).' '
+                . $this->Rows($options) . ' '
                 . $this->Atr($options).' >'.$value;
         $textarea .= '</textarea>';
         return new BuildInput($textarea);
@@ -178,6 +179,13 @@ class Form {
     private function Disabled($options) {
         if(isset($options['disabled'])){
             return ($options['disabled'] == true) ? 'disabled=""' : null;
+        }
+        return null;
+    }
+    
+    private function Rows($options) {
+        if(isset($options['rows'])){
+            return ($options['rows'] == true) ? 'rows="'.$options['rows'].'"' : null;
         }
         return null;
     }
