@@ -6,10 +6,11 @@
  * and open the template in the editor.
  */
 
-namespace vadc\kernel\Grid;
+namespace wco\kernel\Grid;
 
-use vadc\kernel\Grid\TableProperties;
-use vadc\kernel\Grid\Paginations;
+use wco\kernel\Grid\TableProperties;
+use wco\kernel\Grid\Paginations;
+use wco\kernel\WCO;
 
 /**
  * Description of Table
@@ -70,7 +71,7 @@ class Table extends TableProperties{
             }else{
                 $params_url['sort'] = 'DESC';
             }
-            $url = \Vadc::Url(''.$this->uri, $params_url);
+            $url = WCO::Url(''.$this->uri, $params_url);
             
             $this->htmlHeader .= '<th><a href="'.$url.'">'.$arr['name'].'</a></th>';
             $this->col[] = $arr['col'];
@@ -97,14 +98,14 @@ class Table extends TableProperties{
     }
     
     private function Link($id) {
-        $link = '<a href="'.\Vadc::Url('/?option='.$this->uri.'&action='.$this->action_edit, [$this->id =>$id]).'"'
+        $link = '<a href="'.WCO::Url('/?option='.$this->uri.'&action='.$this->action_edit, [$this->id =>$id]).'"'
             . ' title="Редактировать"'
             . ' style="margin-right:5px;"'
             . ' class="btn btn-primary">'
             . '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>'
             . '</a>';
         $link .= '<a onClick="return confirm(\'Вы подтверждаете удаление?\');"'
-            . ' href="'.\Vadc::Url('/?option='.$this->uri.'&action='.$this->action_delete, [$this->id => $id]).'" title="Удалить" '
+            . ' href="'.WCO::Url('/?option='.$this->uri.'&action='.$this->action_delete, [$this->id => $id]).'" title="Удалить" '
             . 'style="margin-right:5px;"'
             . ' class="btn btn-danger">'
             . '<i class="fa fa-trash" aria-hidden="true"></i></a>';

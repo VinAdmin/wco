@@ -40,7 +40,8 @@ class Form {
                 . 'placeholder="'.$this->placeholder($options).'" '
                 . $this->maxlength($options).' '
                 . $this->Atr($options).' '
-                . $this->checked($options).' />';
+                . $this->checked($options).' '
+                . $this->Disabled($options) .'/>';
         
         return new BuildInput($input);
     }
@@ -157,12 +158,27 @@ class Form {
     
     /**
      * Кнопка.
+     * 
      * @param string $type
      * @param string $text
+     * @param string $class Клас стилей
      * @return string
      */
-    public function Button($type, $text) {
-        $btn = '<button type="' . $type . '">'.$text.'</button>';
+    public function Button($type, $text, $class = null) {
+        if(is_null($class)){
+            $class = null;
+        }else{
+            $class = 'class="'.$class.'"';
+        }
+        
+        $btn = '<button type="' . $type . '" '.$class.'>'.$text.'</button>';
         return $btn;
+    }
+    
+    private function Disabled($options) {
+        if(isset($options['disabled'])){
+            return ($options['disabled'] == true) ? 'disabled=""' : null;
+        }
+        return null;
     }
 }

@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace vadc\kernel\Grid;
+namespace wco\kernel\Grid;
 
 /**
  * Description of TableProperties

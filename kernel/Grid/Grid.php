@@ -1,9 +1,10 @@
 <?php
-namespace vadc\kernel\Grid;
+namespace wco\kernel\Grid;
 
-use vadc\kernel\Grid\Inquiries;
-use vadc\kernel\Grid\Table;
-use vadc\kernel\Grid\TableProperties;
+use wco\kernel\Grid\Inquiries;
+use wco\kernel\Grid\Table;
+use wco\kernel\Grid\TableProperties;
+use wco\kernel\WCO;
 
 /**
  * Grid вспомогательная библиотека для PDO позволяющая вывести список записей из таблицы.
@@ -26,7 +27,11 @@ class Grid extends Table{
      * @param array $options array('get'=>'','action_edit'=>'name')
      */
     function __construct($options=array()) {
-        \Vadc::setCss(['/template/css/grid.css']);
+        WCO::setCss([
+            '/default/css/grid.css',
+            '/default/font-awesome-4.7.0/css/font-awesome.css'
+        ]);
+        
         $this->getCol = strip_tags(filter_input(INPUT_GET, 'col'));
         $this->getSort = strip_tags(filter_input(INPUT_GET, 'sort'));
         $this->column = $this->getCol;

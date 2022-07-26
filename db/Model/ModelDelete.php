@@ -6,7 +6,7 @@ namespace wco\db\Model;
  *
  * @author vinamin
  */
-class ModelDelete extends wco\db\Assembly{
+class ModelDelete extends \wco\db\Assembly{
     public function setTable(string $where = null, string $table) {
         $sql = 'DELETE FROM '.$table.' ';
         if(!empty($where)){

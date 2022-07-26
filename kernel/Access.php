@@ -6,9 +6,8 @@ class Access {
     static $login = false;
 
     public function __construct() {
-        $session_user_id = filter_input(INPUT_SESSION, 'user_id');
         
-        if($session_user_id){
+        if(isset($_SESSION['user_id'])){
             self::$user_id = $session_user_id;
             self::$login = filter_input(INPUT_SESSION, 'login');
         }

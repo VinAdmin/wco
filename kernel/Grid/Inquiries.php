@@ -1,12 +1,12 @@
 <?php
-namespace vadc\kernel\Grid;
+namespace wco\kernel\Grid;
 
 /**
  * Description of PDO
  *
  * @author vinamin
  */
-class Inquiries extends \vadc\kernel\DB{
+class Inquiries extends \wco\db\DB{
     protected $sql = null;
     protected $table = array();
     protected $joinInner = null;

@@ -46,4 +46,20 @@ class ModelInsert extends Assembly{
         }
         return $new_key;
     }
+    
+    /**
+     * 
+     * @param string $table
+     * @param array $columns
+     * @param array $key
+     */
+    public function InsertToUpdate(string $table, array $columns, string $key) {
+        $str_insert = implode(',', array_keys($columns));
+        $str_values = implode(',:', array_keys($columns));
+        
+        $sql = 'INSERT INTO `'.$table.'` ('.$str_insert.') VALUES (:'.$str_values.') ON DUPLICATE KEY UPDATE '.$key;
+        $this->arrayParams($columns);
+        
+        self::setAssembly($sql); //Задаем строку
+    }
 }
