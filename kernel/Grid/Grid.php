@@ -18,7 +18,7 @@ class Grid extends Table{
     
     private $count = null;
     private $render_table = null;
-    private $columns = null;
+    protected $columns = null;
     private $Inquiries = null;
     private $getCol;
     private $getSort;
@@ -45,8 +45,11 @@ class Grid extends Table{
      * @param string $model Модель формирования запроса.
      */
     public function FromTable($count,$model) {
+        
         $this->Inquiries = new Inquiries($model);
+        
         $this->Inquiries->setSort($this->getCol, $this->getSort);
+        
         $this->count = $count;
         $this->render_table = $this->Inquiries->FatchTable(
             $this->paginations->Start($this->count,$this->rows),

@@ -58,27 +58,30 @@ class Table extends TableProperties{
      */
     public function setHeader($col) {
         $this->paginations->uri = $this->uri;
-        
-        $this->htmlHeader = '<thead class="thead-dark">';
-        $this->htmlHeader .= '<tr>';
+        $this->htmlHeader = "\t\t<thead class=\"thead-dark\">";
+        $this->htmlHeader .= "\n\t\t\t<tr>";
         if($this->page){
             $params_url['page'] = $this->page;
         }
-        foreach ($col as $arr){
+        foreach ($col as $col_num => $arr){
             $params_url['col'] = $arr['col'];
             if($this->sort == 'DESC'){
                 $params_url['sort'] ='ASC';
             }else{
                 $params_url['sort'] = 'DESC';
             }
-            $url = WCO::Url(''.$this->uri, $params_url);
+            $url = WCO::Url('/'.$this->uri, $params_url);
             
-            $this->htmlHeader .= '<th><a href="'.$url.'">'.$arr['name'].'</a></th>';
+            $this->htmlHeader .= "\n\t\t\t\t<th>\n"
+                    . "\t\t\t\t\t<a href=\"".$url."\">".$arr['name'].'</a>'
+                    . $this->FilterForm($col_num,$arr['col'])
+                . "\t\t\t\t</th>\n";
             $this->col[] = $arr['col'];
         }
-        $this->htmlHeader .= '<th>--</th>';
-        $this->htmlHeader .= '</tr>';
-        $this->htmlHeader .= '</thead>';
+        var_dump(Filter::$_get);
+        $this->htmlHeader .= "\t\t\t\t<th>".$this->Button(self::INPUT_SUBMIT, 'Фильтровать')."-</th>";
+        $this->htmlHeader .= "\n\t\t\t</tr>";
+        $this->htmlHeader .= "\n\t\t</thead>\n\t\t";
     }
     
     /**
@@ -113,10 +116,11 @@ class Table extends TableProperties{
     }
     
     public function RenderTable() {
-        $html = '<table class="">';
+        $html = $this->FormStart('grid');
+        $html .= "<table class=\"\">\n\t\t";
         $html .= $this->htmlHeader;
         $html .= $this->htmlBody;
-        $html .= '</table>';
+        $html .= '</table>'. $this->FormEnd();
         return $html.$this->paginations->Paging();
     }
 }

@@ -1,6 +1,8 @@
 <?php
 namespace wco\kernel\Grid;
 
+use wco\kernel\Grid\Filter;
+
 /**
  * Description of PDO
  *
@@ -21,10 +23,16 @@ class Inquiries extends \wco\db\DB{
             
     function __construct(object $model){
         $this->model = $model;
+        
     }
     
-    public function FatchTable(int $start, int $rows) {
-        $data = array();
+    public function FatchTable(int $start, int $rows, $data = array()) {
+        /*
+        if($where){
+            $where = '';
+            $this->model->where($where);
+        }*/
+        
         if($this->col && $this->sort){
             $this->model->order_by('`'.$this->col.'` '.$this->sort);
         }
