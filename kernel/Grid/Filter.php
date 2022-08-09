@@ -20,17 +20,24 @@ class Filter extends Form implements \wco\kernel\Grid\Test{
     }
     
     protected function FilterForm($name) {
+        //var_dump(self::$_column);
         if(!isset(self::$_column[$name]['type_input'])) { return false; }
         
         if(self::$_column[$name]['type_input'] == 'text'){
-            $value = strip_tags(filter_input(INPUT_GET, $name));
+            $value = strip_tags(filter_input(INPUT_GET, $this->FixForm($name)));
             self::$_get[$name] = $value;
-            return $this->Input(self::$_column[$name]['type_input'], $name, $value)->Field();
+            return $this->Input(self::$_column[$name]['type_input'], $this->FixForm($name), $value)->Field();
         }
     }
     
     static public function GetMethod() {
         return self::$_get;
+    }
+    
+    public function FixForm($name) {
+        $type_arr = explode('.', $name);
+        $type_end = end($type_arr);
+        return $type_end;
     }
 }
 
