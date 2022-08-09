@@ -63,6 +63,7 @@ class Table extends TableProperties{
         if($this->page){
             $params_url['page'] = $this->page;
         }
+        
         foreach ($col as $col_num => $arr){
             $params_url['col'] = $arr['col'];
             if($this->sort == 'DESC'){
@@ -74,12 +75,12 @@ class Table extends TableProperties{
             
             $this->htmlHeader .= "\n\t\t\t\t<th>\n"
                     . "\t\t\t\t\t<a href=\"".$url."\">".$arr['name'].'</a>'
-                    . $this->FilterForm($col_num,$arr['col'])
+                    . $this->FilterForm($arr['col'])
                 . "\t\t\t\t</th>\n";
             $this->col[] = $arr['col'];
         }
-        var_dump(Filter::$_get);
-        $this->htmlHeader .= "\t\t\t\t<th>".$this->Button(self::INPUT_SUBMIT, 'Фильтровать')."-</th>";
+        //var_dump(Filter::$_get);
+        $this->htmlHeader .= "\t\t\t\t<th>".$this->Button(self::INPUT_SUBMIT, '<i class="fa fa-filter" aria-hidden="true"></i>','btn btn-success')."</th>";
         $this->htmlHeader .= "\n\t\t\t</tr>";
         $this->htmlHeader .= "\n\t\t</thead>\n\t\t";
     }

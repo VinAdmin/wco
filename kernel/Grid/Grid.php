@@ -5,6 +5,7 @@ use wco\kernel\Grid\Inquiries;
 use wco\kernel\Grid\Table;
 use wco\kernel\Grid\TableProperties;
 use wco\kernel\WCO;
+use wco\db\Model\ModelSelect;
 
 /**
  * Grid вспомогательная библиотека для PDO позволяющая вывести список записей из таблицы.
@@ -44,7 +45,16 @@ class Grid extends Table{
      * @param string $count Записей в таблице
      * @param string $model Модель формирования запроса.
      */
-    public function FromTable($count,$model) {
+    public function FromTable($count,ModelSelect $model) {
+        if(is_array(self::$_column)){
+            foreach (self::$_column as $key => $filt){
+                $where[] = " ". strip_tags($key) . " LIKE '%" . strip_tags(filter_input(INPUT_GET, $key)) . "%'";
+            }
+            
+            $str_where = implode(' AND ', $where);
+
+            $model->where($str_where);
+        }
         
         $this->Inquiries = new Inquiries($model);
         
@@ -70,7 +80,7 @@ class Grid extends Table{
         }
         $this->columns[] = ['col'=> $column, 'name' => $aliace];
         
-        return new TableProperties();
+        return new TableProperties($column,$aliace);
     }
     
     /**

@@ -21,9 +21,8 @@ class Inquiries extends \wco\db\DB{
     private $sort;
     private $model;
             
-    function __construct(object $model){
+    function __construct($model){
         $this->model = $model;
-        
     }
     
     public function FatchTable(int $start, int $rows, $data = array()) {

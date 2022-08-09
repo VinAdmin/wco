@@ -12,11 +12,23 @@ class TableProperties extends Filter{
     static private $valign = 'top';
     static private $form;
     
+    function __construct($column,$aliace) {
+        self::setColumnFilter($column, $aliace);
+        //var_dump(self::$_column);
+        //self::Column($column);
+    }
+    
+    static public function Column($column) {
+        //self::$column = $column;
+    }
+
+
     /**
      * Вертикальная ориентация текста в ячейке
      * @param string $param top, bottom, middle
      */
     static public function setValign($param) {
+        //var_dump(self::$_column);
         self::$valign = $param;
         return new Filter();
     }
