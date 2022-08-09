@@ -33,7 +33,7 @@ class Inquiries extends \wco\db\DB{
         }*/
         
         if($this->col && $this->sort){
-            $this->model->order_by('`'.$this->col.'` '.$this->sort);
+            $this->model->order_by(''.$this->col.' '.$this->sort);
         }
         $this->model->limit($start, $rows);
         return $this->fetchAll($data);

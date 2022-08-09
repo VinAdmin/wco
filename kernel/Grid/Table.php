@@ -34,12 +34,17 @@ class Table extends TableProperties{
     private $htmlHeader = null;
     private $htmlBody = null;
     private $page;
+    private $options;
     
     protected $paginations;
     
     function __construct($options=array()) {
         $this->paginations = new Paginations();
         $this->page = strip_tags(filter_input(INPUT_GET,'page'));
+        
+        if(!isset($options['edit'])){
+            $this->options['edit'] = true;
+        }
         
         if(isset($options['get'])){
             $this->id = $options['get'];
@@ -57,7 +62,7 @@ class Table extends TableProperties{
      * @param type $col
      */
     public function setHeader($col) {
-        $this->paginations->uri = $this->uri;
+        $this->paginations->uri = '/'.$this->uri;
         $this->htmlHeader = "\t\t<thead class=\"thead-dark\">";
         $this->htmlHeader .= "\n\t\t\t<tr>";
         if($this->page){
@@ -91,10 +96,13 @@ class Table extends TableProperties{
      */
     public function setBody(array $params) {
         $this->htmlBody = null;
+        //WCO::VarDump($params);exit();
         foreach ($params as $arr){
             $this->htmlBody .= '<tr>';
             foreach ($this->col as $key_col){
-                $this->htmlBody .= '<td '.self::getValign().' class="td_grid">'.$arr[$key_col].'</td>';
+                $col = explode('.', $key_col);
+                $end = end($col);
+                $this->htmlBody .= '<td '.self::getValign().' class="td_grid">'  .$arr[$end] . '</td>';
             }
             $this->htmlBody .= '<td valign="top" width="100">'.$this->Link(array_shift($arr)).'</td>';
             $this->htmlBody .= '</tr>';
@@ -102,17 +110,22 @@ class Table extends TableProperties{
     }
     
     private function Link($id) {
-        $link = '<a href="'.WCO::Url('/?option='.$this->uri.'&action='.$this->action_edit, [$this->id =>$id]).'"'
-            . ' title="Редактировать"'
-            . ' style="margin-right:5px;"'
-            . ' class="btn btn-primary">'
-            . '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>'
-            . '</a>';
-        $link .= '<a onClick="return confirm(\'Вы подтверждаете удаление?\');"'
-            . ' href="'.WCO::Url('/?option='.$this->uri.'&action='.$this->action_delete, [$this->id => $id]).'" title="Удалить" '
-            . 'style="margin-right:5px;"'
-            . ' class="btn btn-danger">'
-            . '<i class="fa fa-trash" aria-hidden="true"></i></a>';
+        if($this->options['edit'] == true){
+            $link = '<a href="'.WCO::Url('/?option='.$this->uri.'&action='.$this->action_edit, [$this->id =>$id]).'"'
+                . ' title="Редактировать"'
+                . ' style="margin-right:5px;"'
+                . ' class="btn btn-primary">'
+                . '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>'
+                . '</a>';
+            $link .= '<a onClick="return confirm(\'Вы подтверждаете удаление?\');"'
+                . ' href="'.WCO::Url('/?option='.$this->uri.'&action='.$this->action_delete, [$this->id => $id]).'" title="Удалить" '
+                . 'style="margin-right:5px;"'
+                . ' class="btn btn-danger">'
+                . '<i class="fa fa-trash" aria-hidden="true"></i></a>';
+        }else{
+            $link = null;
+        }
+        
         return  $link;
     }
     
