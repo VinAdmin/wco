@@ -2,6 +2,8 @@
 
 namespace wco\kernel\Grid;
 
+use wco\kernel\WCO;
+
 /**
  * Пагинация.
  */
@@ -49,41 +51,41 @@ class Paginations {
         if ($this->page != 1){
             $data['page']=1;
             $this->pervpage = '<li class="page-item">'
-                    . '<a href="'.\wco::Url($this->uri, $data).'" class="page-link"><<</a></li>'
+                    . '<a href="'.WCO::Url($this->uri, $data).'" class="page-link"><<</a></li>'
                     . '<li class="page-item">';
             $data['page']= $this->page - 1;
-            $this->pervpage .='<a href="'.\wco::Url($this->uri, $data).'" class="page-link"><</a></li>';
+            $this->pervpage .='<a href="'.WCO::Url($this->uri, $data).'" class="page-link"><</a></li>';
         }
         // Проверяем нужны ли стрелки вперед
         if ($this->page != $this->total){
             $data['page']=$this->page + 1;
             $nextpage = '<li class="page-item">'
-                    . '<a href="'.\wco::Url($this->uri, $data).'" class="page-link">></a></li>'
+                    . '<a href="'.WCO::Url($this->uri, $data).'" class="page-link">></a></li>'
                     . '<li class="page-item">';
             $data['page'] = $this->total;
-            $nextpage .= '<a href="'.\wco::Url($this->uri, $data).'" class="page-link">>></a></li>';
+            $nextpage .= '<a href="'.WCO::Url($this->uri, $data).'" class="page-link">>></a></li>';
         }
 
         // Находим две ближайшие станицы с обоих краев, если они есть
         if($this->page - 2 > 0){
             $data['page'] = $this->page - 2;
             $page2left = '<li class="page-item">'
-                    . '<a href="'.\wco::Url($this->uri, $data).'" class="page-link">'. ($this->page - 2) .'</a></li>';
+                    . '<a href="'.WCO::Url($this->uri, $data).'" class="page-link">'. ($this->page - 2) .'</a></li>';
         }
         if($this->page - 1 > 0){
             $data['page'] = $this->page - 1;
             $page1left = '<li class="page-item">'
-                    . '<a href="'.\wco::Url($this->uri, $data).'" class="page-link">'. ($this->page - 1) .'</a></li>';
+                    . '<a href="'.WCO::Url($this->uri, $data).'" class="page-link">'. ($this->page - 1) .'</a></li>';
         }
         if($this->page + 2 <= $this->total){
             $data['page'] = $this->page + 2;
             $page2right = '<li class="page-item">'
-                    . '<a href="'.\wco::Url($this->uri, $data).'" class="page-link">'. ($this->page + 2) .'</a></li>';
+                    . '<a href="'.WCO::Url($this->uri, $data).'" class="page-link">'. ($this->page + 2) .'</a></li>';
         }
         if($this->page + 1 <= $this->total){
             $data['page'] = $this->page + 1;
             $page1right = '<li class="page-item">'
-                . '<a href="'.\wco::Url($this->uri, $data).'" class="page-link">'. ($this->page + 1) .'</a></li>';
+                . '<a href="'.WCO::Url($this->uri, $data).'" class="page-link">'. ($this->page + 1) .'</a></li>';
         }
         
         $html = '<nav aria-label="" style="margin-top:5px;">';
