@@ -49,12 +49,17 @@ class Grid extends Table{
         //var_dump(self::$_column);
         if(is_array(self::$_column)){
             foreach (self::$_column as $key => $filt){
-                $where[] = " ". strip_tags($key) . " LIKE '%" . str_replace(['+'], [''],
-                        strip_tags(filter_input(INPUT_GET, $this->FixForm($key)))) . "%'";
+                $search = str_replace(['+'], [''],
+                    strip_tags(filter_input(INPUT_GET, $this->FixForm($key))));
+                if(!empty($search)){
+                    $where[] = " ". strip_tags($key) . " LIKE '%" . $search . "%'";
+                }
             }
             
-            $str_where = implode(' AND ', $where);
-            $model->where($str_where);
+            if(isset($where)){
+                $str_where = implode(' AND ', $where);
+                $model->where($str_where);
+            }
         }
         
         $this->Inquiries = new Inquiries($model);
