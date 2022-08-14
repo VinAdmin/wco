@@ -18,8 +18,12 @@
         }
     ],
     "minimum-stability": "dev",
-    "virsion": "0.1.1",
     "require": {
     	"php": ">=7.3"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
     }
 }
