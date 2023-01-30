@@ -27,6 +27,7 @@ class WCO
 
     public function __construct() 
     {
+        session_start();
         $this->LoadConfig();
         if(!isset(self::$config['debug']) || self::$config['debug'] == true){
             Debugger::enable();
@@ -223,7 +224,6 @@ class WCO
      * @return type
      */
     public function RunKernel() {
-        session_start();
         new Access();
         $rout = new Route();
         return $rout->run();
