@@ -31,7 +31,7 @@ class View extends Heder
     {
         $layout = Route::$link_document . '/views/main.php';
         
-        if(WCO::$config['modules']['admin_aut_page'] == true){
+        if(WCO::$config['admin_aut_page'] == true){
             $layout = Route::$link_document . '/views/aut.php';
         }
         
