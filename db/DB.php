@@ -21,11 +21,7 @@ class DB extends \wco\db\GenerateSql{
     }
     
     public function LoadConfug() {
-        if(isset(\wco\kernel\WCO::$config['kernel_debug'])){
-            $dir = dirname(filter_input(INPUT_SERVER, 'SCRIPT_NAME'), 2) . "/";
-        }else{
-            $dir = dirname(filter_input(INPUT_SERVER, 'SCRIPT_FILENAME'), 2)  . "/";
-        }
+        $dir = dirname(filter_input(INPUT_SERVER, 'SCRIPT_FILENAME'), 2)  . "/";
         //Подключение основных файлов ядра
         $this->config_file_db = $dir.'config/db.php';
         
