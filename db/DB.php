@@ -25,7 +25,7 @@ class DB extends \wco\db\GenerateSql{
         //Подключение основных файлов ядра
         $this->config_file_db = $dir.'config/db.php';
         
-        echo $this->config_file_db."<br>";
+        //echo $this->config_file_db."<br>";
         
         if(isset(\wco\kernel\WCO::$config['kernel_debug'])){
             if(!file_exists($this->config_file_db)){
