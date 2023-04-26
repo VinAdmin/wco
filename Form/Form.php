@@ -7,10 +7,12 @@ use wco\forms\BuildInput;
  * Класс генерации форм.
  * @property string INPUT_TEXT type="text"
  * @property string INPUT_SUBMIT type="submit"
+ * @property string INPUT_CHECKBOX type="checkbox"
  */
 class Form {
     const INPUT_TEXT = 'text';
     const INPUT_SUBMIT = 'submit';
+    const INPUT_CHECKBOX = 'checkbox';
 
     public function FormStart(string $name = 'new_form',string $method = 'get', $action = null,$autocomplete = 'on',array $options=array()) {
         $class = $this->Class($options,null);
