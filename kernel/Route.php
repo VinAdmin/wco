@@ -123,7 +123,7 @@ class Route
             }
             if(isset($arr_uri[1][1])){
                 $controller = ($arr_uri[1][0] != 'index') ? $arr_uri[1][0] : null;
-                $key_action = 2;
+                $key_action = 1;
             }
         }else{ $controller = 'Site'; }
         //Если существует массив
