@@ -116,13 +116,13 @@ class Route
             exit;
         } $arr_uri = [];
         if(\preg_match_all('#/([a-z]+)#su', $uri, $arr_uri)){
-            //var_dump();exit();
+            //var_dump($arr_uri);exit();
             if(!$this->LoadModules(self::ParserUriModules())){
                 $controller = ($arr_uri[1][0] != 'index') ? $arr_uri[1][0] : null;
                 $key_action = 1;
             }
             if(isset($arr_uri[1][1])){
-                $controller = ($arr_uri[1][1] != 'index') ? $arr_uri[1][1] : null;
+                $controller = ($arr_uri[1][0] != 'index') ? $arr_uri[1][0] : null;
                 $key_action = 2;
             }
         }else{ $controller = 'Site'; }
