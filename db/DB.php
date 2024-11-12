@@ -66,6 +66,21 @@ class DB extends \wco\db\GenerateSql{
                 $pdo->exec('PRAGMA foreign_keys=ON');
             }
             
+            //sqli
+            if(self::$config_db[self::$connect_type_db]['db'] == 'postgresql'){
+                $conStr = sprintf(
+                    "pgsql:host=%s;port=%d;dbname=%s;user=%s;password=%s",
+                    self::$config_db[self::$connect_type_db]['host'],
+                    self::$config_db[self::$connect_type_db]['port'],
+                    self::$config_db[self::$connect_type_db]['db_name'],
+                    self::$config_db[self::$connect_type_db]['login'],
+                    self::$config_db[self::$connect_type_db]['password']
+                );
+                $pdo = new \PDO($conStr);
+                $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+                //$pdo->exec('PRAGMA foreign_keys=ON');
+            }
+            
             return $pdo;
         }
         catch(PDOException $e){

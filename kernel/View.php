@@ -31,21 +31,32 @@ class View extends Heder
     {
         $layout = Route::$link_document . '/views/main.php';
         
-        /*
-        if(WCO::$config['modules']['admin_aut_page'] == true){
-            $layout = Route::$link_document . '/views/aut.php';
-        }*/
-        
         include_once($layout);
     }
 
     function generate($template_view, $array = null)
     {
+        $usetAut = new \app\models\User();
+        
+        if(!wco::Login()){
+            $aut = $usetAut->Authorisation();
+        }
+        
+        if(isset($_GET['logout'])){
+            $usetAut->LogOut();
+        }
+        
         if(!empty($array)){
             extract($array);
         }
         ob_start();
-        $views = Route::$link_document . '/views' . $template_view;
+        
+        if(WCO::$config['modules']['admin_aut_page'] == true && !wco::Login()){
+            $views = Route::$link_document . '/views/aut.php';
+        }else{
+            $views = Route::$link_document . '/views' . $template_view;
+        }
+        
         include_once($views);
         $this->views = ob_get_contents();
         ob_end_clean();
