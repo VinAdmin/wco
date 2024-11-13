@@ -78,7 +78,7 @@ class Table extends TableProperties{
             }
             $url = WCO::Url('/'.$this->uri, $params_url);
             
-            $this->htmlHeader .= "\n\t\t\t\t<th>\n"
+            $this->htmlHeader .= "\n\t\t\t\t<th classs = \"coll\">\n"
                     . "\t\t\t\t\t<a href=\"".$url."\">".$arr['name'].'</a>'
                     . $this->FilterForm($arr['col'])
                 . "\t\t\t\t</th>\n";

@@ -27,6 +27,7 @@ class Inquiries extends \wco\db\DB{
     }
     
     public function FatchTable(int $start, int $rows, $data = array()) {
+        //var_dump($start);
         if($this->col && $this->sort){
             $this->model->order_by(''.$this->col.' '.$this->sort);
         }
@@ -34,6 +35,11 @@ class Inquiries extends \wco\db\DB{
         $offset = $this->offset;
         if($this->offset == true){
             $offset = 'offset';
+        }
+        if($start >= $rows){
+            $rows = $rows;
+        }else{
+            $rows=null;
         }
         
         $this->model->limit($start, $rows, $offset);

@@ -47,7 +47,7 @@ class Grid extends Table{
      * @param string $model Модель формирования запроса.
      */
     public function FromTable($count, ModelSelect $model) {
-        //var_dump(self::$_column);
+        //var_dump($count);
         if(is_array(self::$_column)){
             foreach (self::$_column as $key => $filt){
                 $search = str_replace(['+'], [''],
