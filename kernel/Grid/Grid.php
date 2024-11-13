@@ -16,7 +16,8 @@ use wco\db\Model\ModelSelect;
  */
 class Grid extends Table{
     public $rows = 25;
-    
+    public $offset = null;
+
     private $count = null;
     private $render_table = null;
     protected $columns = null;
@@ -63,6 +64,7 @@ class Grid extends Table{
         }
         
         $this->Inquiries = new Inquiries($model);
+        $this->Inquiries->offset = $this->offset;
         
         $this->Inquiries->setSort($this->getCol, $this->getSort);
         

@@ -18,6 +18,18 @@ class View extends Heder
     private $path_to_domain = null;
     
     function __construct() {
+        $usetAut = new \app\models\User();
+        if(!wco::Login()){
+            $aut = $usetAut->Authorisation();
+        } 
+        
+        if(!wco::Login()){
+            $aut = $usetAut->Authorisation();
+        }
+        
+        if(isset($_GET['logout'])){
+            $usetAut->LogOut();
+        }
         $this->path_to_domain = dirname(WCO::$doc_root) . '/domain' 
                 . WCO::gatDomainAlias(WCO::$domain);
     }
@@ -36,16 +48,6 @@ class View extends Heder
 
     function generate($template_view, $array = null)
     {
-        $usetAut = new \app\models\User();
-        
-        if(!wco::Login()){
-            $aut = $usetAut->Authorisation();
-        }
-        
-        if(isset($_GET['logout'])){
-            $usetAut->LogOut();
-        }
-        
         if(!empty($array)){
             extract($array);
         }

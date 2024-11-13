@@ -36,7 +36,7 @@ class ModelSelect extends Assembly{
      */
     public function form(string $table = null) {
         $table = (!is_null($table)) ? $table : self::$table;
-        self::$from = ' FROM `'.$table.'` AS `t1`';
+        self::$from = ' FROM '.$table.' AS t1';
         $sql = $this->sqlString();
         self::setAssembly($sql);
         return new ModelSelect();
@@ -45,7 +45,7 @@ class ModelSelect extends Assembly{
     public static function joinLeft(array $table, string $on, array $collums = null){
         $key = array_key_first($table);
         self::$collums .= (is_array($collums)) ? ','.self::ArrayToString($collums,$key) : null;
-        self::$joinLeft .= ' LEFT JOIN `'.$table[$key].'` AS '.$key.' ON '.$on;
+        self::$joinLeft .= ' LEFT JOIN '.$table[$key].' AS '.$key.' ON '.$on;
         return new ModelSelect();
     }
     
@@ -58,7 +58,7 @@ class ModelSelect extends Assembly{
     public static function joinInner(array $table, string $on, array $collums = null){
         $key = array_key_first($table);
         self::$collums .= (is_array($collums)) ? ','.self::ArrayToString($collums,$key) : null;
-        self::$joinInner .= ' INNER JOIN `'.$table[$key].'` AS '.$key.' ON '.$on;
+        self::$joinInner .= ' INNER JOIN '.$table[$key].' AS '.$key.' ON '.$on;
         return new ModelSelect();
     }
     
@@ -82,8 +82,15 @@ class ModelSelect extends Assembly{
         return new ModelSelect();
     }
     
-    public function limit(int $start, $count = null) {
-        $count = (!is_null($count)) ? ','.$count : null;
+    public function limit(int $start, $count = null , $offset = null) 
+    {   
+        if($offset == 'offset'){
+            $offset = ' OFFSET ';
+        }else{
+            $offset = ',';
+        }
+        
+        $count = (!is_null($count)) ? $offset .$count : null;
         self::$limit = ' LIMIT '.$start.$count;
         $sql = $this->sqlString();
         self::setAssembly($sql);
@@ -103,13 +110,13 @@ class ModelSelect extends Assembly{
             foreach ($collums as $key=>$col){
                 if(substr_count($col,'.')){
                     $arr_col = explode('.', $col);
-                    $str_col = '`'.$arr_col[0].'`.`'.$arr_col[1].'`';
+                    $str_col = ''.$arr_col[0].'.'.$arr_col[1].'';
                 }else{
                     $str_col = $col;
                 }
                 
                 if(is_string($key)){
-                    $str .= ''.$str_col.' AS `'.$key.'`,';
+                    $str .= ''.$str_col.' AS '.$key.',';
                 }else{
                     //$str .= $as.'.'.$col.',';
                     $str .= $str_col.',';

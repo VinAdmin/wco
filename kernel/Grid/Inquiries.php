@@ -17,6 +17,7 @@ class Inquiries extends \wco\db\DB{
     protected $collums = null;
     protected $table_db = null;
     protected $order = null;
+    public $offset = null;
     private $col;
     private $sort;
     private $model;
@@ -29,7 +30,13 @@ class Inquiries extends \wco\db\DB{
         if($this->col && $this->sort){
             $this->model->order_by(''.$this->col.' '.$this->sort);
         }
-        $this->model->limit($start, $rows);
+        
+        $offset = $this->offset;
+        if($this->offset == true){
+            $offset = 'offset';
+        }
+        
+        $this->model->limit($start, $rows, $offset);
         return $this->fetchAll($data);
     }
     
