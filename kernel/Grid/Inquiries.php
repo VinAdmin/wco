@@ -17,7 +17,6 @@ class Inquiries extends \wco\db\DB{
     protected $collums = null;
     protected $table_db = null;
     protected $order = null;
-    public $offset = null;
     private $col;
     private $sort;
     private $model;
@@ -27,14 +26,8 @@ class Inquiries extends \wco\db\DB{
     }
     
     public function FatchTable(int $start, int $rows, $data = array()) {
-        //var_dump($start);
         if($this->col && $this->sort){
             $this->model->order_by(''.$this->col.' '.$this->sort);
-        }
-        
-        $offset = $this->offset;
-        if($this->offset == true){
-            $offset = 'offset';
         }
         if($start >= $rows){
             $rows = $rows;
@@ -42,7 +35,7 @@ class Inquiries extends \wco\db\DB{
             $rows=null;
         }
         
-        $this->model->limit($start, $rows, $offset);
+        $this->model->limit($start, $rows);
         return $this->fetchAll($data);
     }
     

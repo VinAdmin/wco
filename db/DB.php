@@ -46,7 +46,6 @@ class DB extends \wco\db\GenerateSql{
         }
         
         if(!isset(self::$config_db[self::$connect_type_db])){
-            //var_dump(self::$config_db);
             throw new \Exception('Не правильное указано подключение к БД');
         }
         

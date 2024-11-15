@@ -6,6 +6,7 @@ use wco\kernel\Grid\Table;
 use wco\kernel\Grid\TableProperties;
 use wco\kernel\WCO;
 use wco\db\Model\ModelSelect;
+use wco\db\DB;
 
 /**
  * Grid вспомогательная библиотека для PDO позволяющая вывести список записей из таблицы.
@@ -16,7 +17,6 @@ use wco\db\Model\ModelSelect;
  */
 class Grid extends Table{
     public $rows = 25;
-    public $offset = null;
 
     private $count = null;
     private $render_table = null;
@@ -47,7 +47,6 @@ class Grid extends Table{
      * @param string $model Модель формирования запроса.
      */
     public function FromTable($count, ModelSelect $model) {
-        //var_dump($count);
         if(is_array(self::$_column)){
             foreach (self::$_column as $key => $filt){
                 $search = str_replace(['+'], [''],
@@ -66,13 +65,24 @@ class Grid extends Table{
         $this->Inquiries = new Inquiries($model);
         $this->Inquiries->offset = $this->offset;
         
+        
         $this->Inquiries->setSort($this->getCol, $this->getSort);
         
         $this->count = $count;
-        $this->render_table = $this->Inquiries->FatchTable(
-            $this->paginations->Start($this->count,$this->rows),
-            $this->rows
-        );
+        if(DB::$config_db['default']['db'] == 'postgresql'){
+            $start = $this->paginations->Start($this->count,$this->rows);
+            
+            $this->render_table = $this->Inquiries->FatchTable(
+                $this->rows,
+                $start
+            );
+        }else{
+            $this->render_table = $this->Inquiries->FatchTable(
+                $this->paginations->Start($this->count,$this->rows),
+                $this->rows
+            );
+        }
+        
         $this->paginations->num = $this->rows;
     }
     
@@ -102,5 +112,14 @@ class Grid extends Table{
         $html_table = $this->RenderTable();
         
         return $html_table;
+    }
+    
+    public function getRows() {
+        return $this->render_table;
+    }
+    
+    public function setSort($column, $sorting) {
+        $this->getCol = $column;
+        $this->getSort = $sorting;
     }
 }

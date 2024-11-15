@@ -2,6 +2,7 @@
 namespace wco\db\Model;
 
 use wco\db\Assembly;
+use wco\db\DB;
 
 /**
  * Description of ModelSelect
@@ -82,9 +83,9 @@ class ModelSelect extends Assembly{
         return new ModelSelect();
     }
     
-    public function limit(int $start, $count = null , $offset = null) 
-    {   
-        if($offset == 'offset'){
+    public function limit(int $start, $count = null) 
+    {
+        if(DB::$config_db['default']['db'] == 'postgresql'){
             $offset = ' OFFSET ';
         }else{
             $offset = ',';

@@ -34,13 +34,13 @@ class ModelUpdate extends \wco\db\Assembly{
     public static function setParams(array $param) {
         $str = null;
         foreach ($param as $key => $values){
-            $str .= '`'.$key.'`=:'.$key.',';
+            $str .= ''.$key.'=:'.$key.',';
         }
         return $str;
     }
     
     public static function Assembly() {
-        $sql = "UPDATE `".self::$table."` SET ".self::$set." WHERE ".self::$where;
+        $sql = "UPDATE ".self::$table." SET ".self::$set." WHERE ".self::$where;
         self::setAssembly($sql);
     }
 }

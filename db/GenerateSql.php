@@ -73,7 +73,7 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
      * @return array
      */
     public function fetchAll(array $params=array(), $pdo = \PDO::FETCH_ASSOC) {
-        //var_dump(self::getAssembly());
+        //var_dump(self::getAssembly());exit();
         try{
             $prepare = DB::connect()->prepare(self::getAssembly());
             $prepare->execute($params);
@@ -145,7 +145,7 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
         $table = empty($table) ? $this->init() : $table;
         $insert->Insert($table, $param);
         //var_dump(self::getAssembly());
-        //var_dump($insert->par);
+        
         try{
             $prepare = DB::connect()->prepare(self::getAssembly());
             $prepare->execute($insert->par);
@@ -179,7 +179,7 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
             $from = $this->init();
         }
         $modelDelete->setTable($where, $from);
-        //var_dump(self::getAssembly());
+        
         try{
             $prepare = DB::connect()->prepare(self::getAssembly());
             $prepare->execute();

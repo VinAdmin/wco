@@ -29,11 +29,7 @@ class Paginations {
         if($this->page > $this->total) $this->page = $this->total;
         // Вычисляем начиная к какого номера
         // следует выводить сообщения
-        if($count >= $rows){
-            $start = $this->page * $rows - $rows;
-        }else{
-            $start = $count;
-        }
+        $start = $this->page * $rows - $rows;
         
         return $start;
     }

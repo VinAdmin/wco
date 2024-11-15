@@ -68,7 +68,7 @@ class Table extends TableProperties{
         if($this->page){
             $params_url['page'] = $this->page;
         }
-        
+        if(!$col){return;}
         foreach ($col as $col_num => $arr){
             $params_url['col'] = $arr['col'];
             if($this->sort == 'DESC'){
@@ -84,7 +84,7 @@ class Table extends TableProperties{
                 . "\t\t\t\t</th>\n";
             $this->col[] = $arr['col'];
         }
-        //var_dump(Filter::$_get);
+        
         $this->htmlHeader .= "\t\t\t\t<th>".$this->Button(self::INPUT_SUBMIT, '<i class="fa fa-filter" aria-hidden="true"></i>','btn btn-success')."</th>";
         $this->htmlHeader .= "\n\t\t\t</tr>";
         $this->htmlHeader .= "\n\t\t</thead>\n\t\t";
@@ -96,8 +96,9 @@ class Table extends TableProperties{
      */
     public function setBody(array $params) {
         $this->htmlBody = null;
-        //WCO::VarDump($params);exit();
+        
         foreach ($params as $arr){
+            if(!$this->col){return;}
             $this->htmlBody .= '<tr>';
             foreach ($this->col as $key_col){
                 $col = explode('.', $key_col);
@@ -136,5 +137,10 @@ class Table extends TableProperties{
         $html .= $this->htmlBody;
         $html .= '</table>'. $this->FormEnd();
         return $html.$this->paginations->Paging();
+    }
+    
+    public function getPaging() {
+        $this->paginations->uri = $this->uri;
+        return $this->paginations->Paging();
     }
 }

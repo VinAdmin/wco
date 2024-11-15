@@ -42,7 +42,7 @@ class WCO
     
     private function LoadConfig() {
         $http = filter_input(INPUT_SERVER, 'HTTP_HOST');
-        //var_dump($http);exit();
+        
         if(is_null($http)){
             $dirname = dirname(filter_input(INPUT_SERVER, 'SCRIPT_NAME'), 2) . '/';
         }else{
@@ -51,7 +51,7 @@ class WCO
         
         //Подключение основных файлов ядра
         $config_file = $dirname . 'config/config.php';
-        //var_dump($config_file);exit();
+        
         if(!file_exists($config_file)){
             throw new \Exception('Не удалось найти файл конфигураций ' .$config_file);
         }else{
