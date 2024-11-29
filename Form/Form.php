@@ -38,7 +38,7 @@ class Form {
      * Поле <input />
      * @param string $type Тип поля date, text, submit
      * @param string $name Имя поля
-     * @param type $value Значение
+     * @param type $value defaulu null
      * @param array $options array(
      *                          'class' => 'По умолчанию класс form-control',
      *                          'placeholder'=>'value',
