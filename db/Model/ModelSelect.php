@@ -63,6 +63,11 @@ class ModelSelect extends Assembly{
         return new ModelSelect();
     }
     
+    /**
+     * 
+     * @param string $param
+     * @return $this
+     */
     public function where(string $param) {
         self::$where = ' WHERE '.$param.' ';
         $sql = $this->sqlString();
