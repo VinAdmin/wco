@@ -38,6 +38,10 @@ class Table extends TableProperties{
     
     protected $paginations;
     
+    /**
+     * 
+     * @param type $options
+     */
     function __construct($options=array()) {
         $this->paginations = new Paginations();
         $this->page = strip_tags(filter_input(INPUT_GET,'page'));
@@ -112,12 +116,17 @@ class Table extends TableProperties{
     
     private function Link($id) {
         if($this->options['edit'] == true){
-            $link = '<a href="'.WCO::Url('/?option='.$this->uri.'&action='.$this->action_edit, [$this->id =>$id]).'"'
+            if($this->action_edit == false){
+                $link = '';
+            }else{
+                $link = '<a href="'.WCO::Url('/?option='.$this->uri.'&action='.$this->action_edit, [$this->id =>$id]).'"'
                 . ' title="Редактировать"'
                 . ' style="margin-right:5px;"'
                 . ' class="btn btn-primary">'
                 . '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>'
                 . '</a>';
+            }
+            
             $link .= '<a onClick="return confirm(\'Вы подтверждаете удаление?\');"'
                 . ' href="'.WCO::Url('/?option='.$this->uri.'&action='.$this->action_delete, [$this->id => $id]).'" title="Удалить" '
                 . 'style="margin-right:5px;"'
