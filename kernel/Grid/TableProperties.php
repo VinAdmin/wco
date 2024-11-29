@@ -11,7 +11,8 @@ use wco\kernel\Grid\Filter;
 class TableProperties extends Filter{
     static private $valign = 'top';
     static private $form;
-    
+    static protected $additional_text;
+            
     function __construct($column,$aliace) {
         self::setColumnFilter($column, $aliace);
         //var_dump(self::$_column);
@@ -39,5 +40,9 @@ class TableProperties extends Filter{
      */
     static protected function getValign() {
         return 'valign="'.self::$valign.'"';
+    }
+    
+    static function setAdditionalText($param) {
+        self::$additional_text[self::$key_column] = $param;
     }
 }

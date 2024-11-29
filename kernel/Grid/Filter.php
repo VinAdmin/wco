@@ -7,7 +7,7 @@ class Filter extends Form implements \wco\kernel\Grid\Test{
     static private $filer_input_type;
     static public $_get;
     protected static $_column;
-    private static $key_column;
+    public static $key_column;
     
     protected static function setColumnFilter($column,$aliace) {
         self::$key_column = $column;

@@ -100,14 +100,14 @@ class Table extends TableProperties{
      */
     public function setBody(array $params) {
         $this->htmlBody = null;
-        
-        foreach ($params as $arr){
+        foreach ($params as $kk => $arr){
             if(!$this->col){return;}
             $this->htmlBody .= '<tr>';
-            foreach ($this->col as $key_col){
+            foreach ($this->col as $k => $key_col){
                 $col = explode('.', $key_col);
+                $additional = (isset(self::$additional_text[$key_col])) ? self::$additional_text[$key_col] : '';
                 $end = end($col);
-                $this->htmlBody .= '<td '.self::getValign().' class="td_grid">'  .$arr[$end] . '</td>';
+                $this->htmlBody .= '<td '.self::getValign().' class="td_grid">'  . $additional .$arr[$end] . '</td>';
             }
             $this->htmlBody .= '<td valign="top" width="100">'.$this->Link(array_shift($arr)).'</td>';
             $this->htmlBody .= '</tr>';
