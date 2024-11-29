@@ -13,10 +13,23 @@ class Form {
     const INPUT_TEXT = 'text';
     const INPUT_SUBMIT = 'submit';
     const INPUT_CHECKBOX = 'checkbox';
+    const ENCTYPE_FROM_DATA = 'multipart/form-data';
 
+    /**
+     * 
+     * @param string $name
+     * @param string $method
+     * @param type $action default null
+     * @param type $autocomplete defaul on
+     * @param array $options $options=['data']
+     * @return string
+     */
     public function FormStart(string $name = 'new_form',string $method = 'get', $action = null,$autocomplete = 'on',array $options=array()) {
         $class = $this->Class($options,null);
-        $form = '<form name="'.$name.'" id="'.$name.'" method="'.$method.'" action="'.$action.'" autocomplete="'.$autocomplete.'" '
+        $encript = (isset($options['data'])) ? 'enctype="' . self::ENCTYPE_FROM_DATA . '"' : null;
+        
+        $form = '<form name="'.$name.'" id="'.$name.'" method="'.$method.'" ' 
+                . $encript . ' action="'.$action.'" autocomplete="'.$autocomplete.'" '
                 . 'class="'.$class.'">';
         return $form;
     }
