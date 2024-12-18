@@ -16,7 +16,8 @@ class Heder
     public $title = null;
     public $description = null;
     public $keywords = null;
-    
+    public $image = false;
+
     static public function Link()
     {
         $assets = new AssetsCite();
@@ -30,7 +31,8 @@ class Heder
     
     public function Seo()
     {
-        $search = array("\r\n", "\r", "\n");
+        $httpDomain = WCO::$config['protocol'] . filter_input(INPUT_SERVER, 'SERVER_NAME') . filter_input(INPUT_SERVER, 'REQUEST_URI');
+        $search = array("\r\n", "\r", "\n"); 
         $this->title = strip_tags(str_replace($search,'',strip_tags($this->title)));
         $this->description = strip_tags(str_replace($search,'',strip_tags($this->description)));
         $this->keywords = strip_tags(str_replace($search,'',strip_tags($this->keywords)));
@@ -38,10 +40,7 @@ class Heder
         echo '<title>'. $this->title.'</title>'.PHP_EOL;
         echo "\t\t".'<meta name="description" content="'.$this->description.'">'.PHP_EOL;
         echo "\t\t".'<meta name="keywords" content="'.$this->keywords.'">'.PHP_EOL;
-        echo "\t\t<link data-vue-meta=\"ssr\" href=\"". WCO::$config['protocol']
-            .filter_input(INPUT_SERVER, 'SERVER_NAME')
-            .filter_input(INPUT_SERVER, 'REQUEST_URI')
-            ."\" rel=\"canonical\" data-vmid=\"canonical\">".PHP_EOL;
+        echo "\t\t<link data-vue-meta=\"ssr\" href=\"$httpDomain\" rel=\"canonical\" data-vmid=\"canonical\">".PHP_EOL;
         if(isset(WCO::$config['site_name'])){
             echo "\t\t<meta data-vue-meta=\"ssr\" property=\"og:site_name\" "
                 . "content=\"".\WCO::$config['site_name']."\" data-vmid=\"og:site_name\">".PHP_EOL;
@@ -54,6 +53,8 @@ class Heder
             echo "\t\t<meta data-vue-meta=\"ssr\" name=\"twitter:description\" "
                 . "content=\"".$this->description."\" data-vmid=\"twitter:description\">".PHP_EOL;
         }
+        echo ($this->image != false) ? "\t\t<meta property=\"og:image\" content=\"$this->image\">".PHP_EOL : '';
+        echo "\t\t<meta property=\"og:url\" content=\"$httpDomain\">".PHP_EOL;
         echo "\t\t".WCO::getHeder();
     }
 }
