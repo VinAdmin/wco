@@ -42,8 +42,9 @@ class Heder
         echo "\t\t".'<meta name="keywords" content="'.$this->keywords.'">'.PHP_EOL;
         echo "\t\t<link data-vue-meta=\"ssr\" href=\"$httpDomain\" rel=\"canonical\" data-vmid=\"canonical\">".PHP_EOL;
         if(isset(WCO::$config['site_name'])){
+            echo "\t\t<meta name=\"application-name\" content=\"".WCO::$config['site_name']."\">";
             echo "\t\t<meta data-vue-meta=\"ssr\" property=\"og:site_name\" "
-                . "content=\"".\WCO::$config['site_name']."\" data-vmid=\"og:site_name\">".PHP_EOL;
+                . "content=\"".WCO::$config['site_name']."\" data-vmid=\"og:site_name\">".PHP_EOL;
         }
         echo "\t\t<meta data-vue-meta=\"ssr\" property=\"og:title\" "
             . "content=\"".$this->title."\" data-vmid=\"og:title\">".PHP_EOL;
