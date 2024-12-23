@@ -1,9 +1,8 @@
 <?php
 /**
- * Описание класса: Класс генерации заголовка.
+ * Описание класса: Класс генерации заголовка head.
  *
- * @package    NoName
- * @subpackage Heder
+ * @package    kernel
  * @author     Ольхин Виталий <volkhin@texnoblog.uz>
  * @copyright  (C) 2019
  */
@@ -17,6 +16,7 @@ class Heder
     public $description = null;
     public $keywords = null;
     public $image = false;
+    public $siteName = false;
 
     static public function Link()
     {
@@ -37,26 +37,41 @@ class Heder
         $this->description = strip_tags(str_replace($search,'',strip_tags($this->description)));
         $this->keywords = strip_tags(str_replace($search,'',strip_tags($this->keywords)));
         
-        echo '<title>'. $this->title.'</title>'.PHP_EOL;
-        echo "\t\t".'<meta name="description" content="'.$this->description.'">'.PHP_EOL;
-        echo "\t\t".'<meta name="keywords" content="'.$this->keywords.'">'.PHP_EOL;
-        echo "\t\t<link data-vue-meta=\"ssr\" href=\"$httpDomain\" rel=\"canonical\" data-vmid=\"canonical\">".PHP_EOL;
+        $head = $this->getTitle();
+        $head .= "\t\t<link data-vue-meta=\"ssr\" href=\"$httpDomain\" rel=\"canonical\" data-vmid=\"canonical\">".PHP_EOL;
         if(isset(WCO::$config['site_name'])){
-            echo "\t\t<meta name=\"application-name\" content=\"".WCO::$config['site_name']."\">";
-            echo "\t\t<meta data-vue-meta=\"ssr\" property=\"og:site_name\" "
-                . "content=\"".WCO::$config['site_name']."\" data-vmid=\"og:site_name\">".PHP_EOL;
+            $head .= $this->meta("application-name", WCO::$config['site_name']);
+            $head .= $this->metaSsr('og:site_name', WCO::$config['site_name']);
         }
-        echo "\t\t<meta data-vue-meta=\"ssr\" property=\"og:title\" "
-            . "content=\"".$this->title."\" data-vmid=\"og:title\">".PHP_EOL;
+        $head .= $this->metaSsr('og:title', $this->title, );
         if(!empty($this->description)){
-            echo "\t\t<meta data-vue-meta=\"ssr\" property=\"og:description\" "
-                . "content=\"".$this->description."\" data-vmid=\"og:description\">".PHP_EOL;
-            echo "\t\t<meta data-vue-meta=\"ssr\" name=\"twitter:description\" "
-                . "content=\"".$this->description."\" data-vmid=\"twitter:description\">".PHP_EOL;
+            $head .= $this->metaSsr('og:description', $this->description);
+            $head .= $this->metaSsr('twitter:description', $this->description);
         }
-        echo ($this->image != false) ? "\t\t<meta property=\"og:image\" content=\"$this->image\">".PHP_EOL : '';
-        echo "\t\t<meta property=\"og:url\" content=\"$httpDomain\">".PHP_EOL;
-        echo "\t\t".WCO::getHeder();
+        $head .= ($this->image != false) ? $this->metaProperty('og:image', $this->image) : '';
+        $head .= $this->metaProperty('og:url', $httpDomain);
+        $head .= "\t\t".WCO::getHeder();
+        echo $head;
+    }
+    
+    public function getTitle() {
+        $head = '<title>'. $this->title.'</title>'.PHP_EOL;
+        $head .= $this->meta('description', $this->description);
+        $head .= $this->meta('keywords', $this->keywords);
+        return $head;
+    }
+    
+    public function meta($name, $value) {
+        $head = "\t\t<meta name=\"$name\" content=\"$value\">".PHP_EOL;
+        return $head;
+    }
+    
+    public function metaSsr($meta, $value) {
+        return "\t\t<meta data-vue-meta=\"ssr\" content=\"$value\" data-vmid=\"$meta\">".PHP_EOL;
+    }
+    
+    public function metaProperty($meta, $value) {
+        return "\t\t<meta property=\"$meta\" content=\"$value\">".PHP_EOL;
     }
 }
 ?>

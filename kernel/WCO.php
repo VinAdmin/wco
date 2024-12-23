@@ -118,7 +118,8 @@ class WCO
     static public function ServerName()
     {
         $host = $_SERVER['HTTP_HOST'];
-        return self::$server_name = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' . $host . '/' : 'http://' . $host .'/';
+        self::$server_name = WCO::$config['protocol'].$host.'/';
+        return self::$server_name;
     }
     
     /**
