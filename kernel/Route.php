@@ -45,7 +45,7 @@ class Route
         if($this->getModules() && WCO::$request_uri){
             $uri = preg_split('/\/|\?/', WCO::$request_uri);
             if(isset($uri[2])) { $this->controller_name = ucfirst($uri[2]).'Controller';}
-            $this->action_name = isset($uri[3]) ? $uri[3] : 'index';
+            $this->action_name = isset($uri[3]) ? $this->searchUrlValue($uri[3]) : 'index';
         }
         
         // подцепляем файл с классом контроллера
@@ -56,7 +56,7 @@ class Route
         self::$link_document = dirname($this->docRoot) . "/domain/" 
                     . WCO::gatDomainAlias(WCO::$domain).$this->getModules();
         
-        //var_dump($this->controller_path);exit();
+        //var_dump($this->action_name);exit();
         //Проверка контроллера
         if(file_exists($this->controller_path)){ //Емли контроллер не существует используем по умолчанию
             include_once $this->controller_path;
@@ -224,5 +224,13 @@ class Route
         }
         
         return false;
+    }
+    
+    private function searchUrlValue($param) {
+        if (stristr($param, '=') === FALSE) {
+            return $param;
+        } else {
+            return 'index';
+        }
     }
 }
