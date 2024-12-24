@@ -40,48 +40,61 @@ class Route
             include_once $domain_confug;
         }
     }
+    
+    private function loadContriller() {
+        if($this->getModules() && WCO::$request_uri){
+            $uri = preg_split('/\/|\?/', WCO::$request_uri);
+            if(isset($uri[2])) { $this->controller_name = ucfirst($uri[2]).'Controller';}
+            $this->action_name = isset($uri[3]) ? $uri[3] : 'index';
+        }
+        
+        // подцепляем файл с классом контроллера
+        $this->controller_path = dirname($this->docRoot).'/domain/'.WCO::gatDomainAlias(WCO::$domain).$this->getModules() . "/controllers/" 
+                . $this->controller_name.'.php';
+        
+        //Путь подключения корню директории модулей сайта.
+        self::$link_document = dirname($this->docRoot) . "/domain/" 
+                    . WCO::gatDomainAlias(WCO::$domain).$this->getModules();
+        
+        //var_dump($this->controller_path);exit();
+        //Проверка контроллера
+        if(file_exists($this->controller_path)){ //Емли контроллер не существует используем по умолчанию
+            include_once $this->controller_path;
+        }
+        else{
+            /**
+             * Если не один контроллер не найден попытка подгрузить контроллер 
+             * по умолчанию.
+             */
+            $this->controller_name = self::CONTROLLER_DEFAULT;
+            
+            $this->controller_path = dirname($this->docRoot).'/domain/'.WCO::gatDomainAlias(WCO::$domain).$this->getModules() . "/controllers/" 
+                . $this->controller_name. '.php';
+            include_once $this->controller_path;
+            if(WCO::$request_uri){
+                $uri = preg_split('/\/|\?/', WCO::$request_uri);
+                if(isset($uri[1])) { $this->action_name = $uri[1]; }
+            }
+            
+            if($this->getModules() && WCO::$request_uri){
+                $uri = preg_split('/\/|\?/', WCO::$request_uri);
+                if(isset($uri[2])) { $this->action_name = $uri[2];}
+            }
+            
+            //var_dump($this->action_name);exit();
+        }
+    }
 
     /**
      * Запускает контролле и запрашиваемый экшен контроллера.
      */
     public function run()
     {
-        if($this->DefaultPageAuth() || $this->Api()){
-            $this->controller_name = ucfirst($this->controller_name);
-            //var_dump($this->controller_name);
-        } else {
-            $this->action_name = 'aut';
-        }
-        
-        // подцепляем файл с классом контроллера
-        $this->controller_path = dirname($this->docRoot) . "/domain/" 
-                . WCO::gatDomainAlias(WCO::$domain) . "/controllers/" 
-                . $this->controller_name.'.php';
-        //Путь подключения корню директории модулей сайта.
-        self::$link_document = dirname($this->docRoot) . "/domain/" 
-                    . WCO::gatDomainAlias(WCO::$domain);
-        $this->LoadModules();
-        
-        //для отладки
-        //echo $this->controller_path;
-        //echo $this->controller_name;
-        //exit();
-        //Проверка контроллера
-        if(file_exists($this->controller_path)){
-            include_once $this->controller_path;
-        }
-        else{
-            /**
-             * Если не один контроллер не найден попатка подгрузить контроллер 
-             * по по умолчанию.
-             */
-            $this->ControllerDefaulLoadAction();
-            include_once $this->controller_path;
-        }
+        $this->loadContriller();
         // создаем контроллер
         $controller = new $this->controller_name;
-        $action = 'action'. $this->action_name;
-        //var_dump($action);
+        $action = 'action'. ucfirst($this->action_name);
+        //var_dump($action);exit();
         if(method_exists($controller, $action)){
             // вызываем действие контроллера
             $controller->$action();
@@ -100,10 +113,6 @@ class Route
         exit();
     }
     
-    public function Api()
-    {
-        return array_key_exists($this->controller_name, \vadc::$config['modules']);
-    }
     /**
      * Получает адрес и обрабатывает запросы для перенаправления.
      */
@@ -140,7 +149,7 @@ class Route
         if (!empty($action) || !empty($this->getAction)){
             $this->action_name = !empty($this->getAction) ? strip_tags($this->getAction) : $action;
         }
-        //var_dump($this->action_name);
+        //var_dump($this->controller_name);
     }
     
     private function Filtr() {
@@ -148,26 +157,6 @@ class Route
         $this->serverUri = filter_input(INPUT_SERVER, 'REQUEST_URI');
         $this->getOption = filter_input(INPUT_GET, 'option');
         $this->getAction = filter_input(INPUT_GET, 'action');
-    }
-    
-    private function DefaultPageAuth() {
-        $query_string = filter_input(INPUT_SERVER, 'REQUEST_URI');
-        if(!isset(WCO::$config['uri'])){
-            throw new \Exception('В конфигурационном файле "config.php" не найден ключ "uri"');
-        }
-        
-        if(!isset(WCO::$config['default_page_auth'])){
-            throw new \Exception('В конфигурационном файле "config.php" не найден ключ "default_page_auth"');
-        }
-        
-        if(in_array($query_string, WCO::$config['uri'])){return true;}
-        if(WCO::$config['default_page_auth'] === true){
-            $auth = isset(\wco::User()['id']) ? true  : false;
-        }
-        else{
-            $auth = true;
-        }
-        return $auth;
     }
     
     /**
@@ -206,20 +195,6 @@ class Route
     }
     
     /**
-     * Используем контролле по умолчанию и загружаем полученый контроллер вместо 
-     * экшена.
-     * 
-     * @return null
-     */
-    private function ControllerDefaulLoadAction() {
-        $this->controller_path = self::$link_document
-                        . "/controllers/" . self::CONTROLLER_DEFAULT . '.php';
-        $this->action_name = str_replace('Controller', '', $this->controller_name);
-        $this->controller_name = self::CONTROLLER_DEFAULT;
-        return null;
-    }
-    
-    /**
      * Порсер ищит прервый параметр из адресной сторики и возвращает его результат.
      * 
      * @return string Если результат ложный возвращает 0.
@@ -234,5 +209,20 @@ class Route
         }
         
         return 0;
+    }
+    
+    private function getModules() {
+        if(WCO::$request_uri){
+            $uri = preg_split('/\/|\?/', WCO::$request_uri);
+            if(!isset($uri[1])){ return false; }
+            if(empty($uri[1])){ return false; }
+            $modulfolder = dirname($this->docRoot) . "/domain/" 
+                . WCO::gatDomainAlias(WCO::$domain) . '/modules/' . $uri[1];
+            if(is_dir($modulfolder)){
+                return '/modules/' . $uri[1];
+            }
+        }
+        
+        return false;
     }
 }
