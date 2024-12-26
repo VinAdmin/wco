@@ -56,7 +56,7 @@ class Route
         self::$link_document = dirname($this->docRoot) . "/domain/" 
                     . WCO::gatDomainAlias(WCO::$domain).$this->getModules();
         
-        //var_dump($this->action_name);exit();
+        //var_dump($this->controller_path);exit();
         //Проверка контроллера
         if(file_exists($this->controller_path)){ //Емли контроллер не существует используем по умолчанию
             include_once $this->controller_path;
@@ -143,7 +143,7 @@ class Route
         //var_dump($controller);
         if(!empty($controller)){
             $this->controller_name = !empty($this->getOption) ? strip_tags($this->getOption) 
-                    . 'Controller' : $controller.'Controller';
+                    . 'Controller' : ucfirst($controller).'Controller';
         }
         // получаем имя экшена
         if (!empty($action) || !empty($this->getAction)){
