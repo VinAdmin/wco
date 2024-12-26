@@ -98,7 +98,7 @@ class Table extends TableProperties{
      * Генерирует содержимое таблицы.
      * @param array $params
      */
-    public function setBody(array $params) {
+    public function setBody(array $params, $options) {
         $this->htmlBody = null;
         foreach ($params as $kk => $arr){
             if(!$this->col){return;}
@@ -109,12 +109,12 @@ class Table extends TableProperties{
                 $end = end($col);
                 $this->htmlBody .= '<td '.self::getValign().' class="td_grid">'  . $additional .$arr[$end] . '</td>';
             }
-            $this->htmlBody .= '<td valign="top" width="100">'.$this->Link(array_shift($arr)).'</td>';
+            $this->htmlBody .= '<td valign="top" width="100">'.$this->Link(array_shift($arr), $options).'</td>';
             $this->htmlBody .= '</tr>';
         }
     }
     
-    private function Link($id) {
+    private function Link($id, $options = array()) {
         if($this->options['edit'] == true){
             if($this->action_edit == false){
                 $link = '';
@@ -126,15 +126,15 @@ class Table extends TableProperties{
                 . '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>'
                 . '</a>';
             }
+            $url_delete = '';
             
+            if(isset($options['delete'])){ $url_delete = '&'.http_build_query($options['delete']); }
             $link .= '<a onClick="return confirm(\'Вы подтверждаете удаление?\');"'
-                . ' href="'.WCO::Url('/?option='.$this->uri.'&action='.$this->action_delete, [$this->id => $id]).'" title="Удалить" '
+                . ' href="'.WCO::Url('/?option='.$this->uri.'&action='.$this->action_delete, [$this->id => $id]).$url_delete.'" title="Удалить" '
                 . 'style="margin-right:5px;"'
                 . ' class="btn btn-danger">'
                 . '<i class="fa fa-trash" aria-hidden="true"></i></a>';
-        }else{
-            $link = null;
-        }
+        }else{ $link = null; }
         
         return  $link;
     }

@@ -105,9 +105,9 @@ class Grid extends Table{
      * Генерирует таблицу, из полученых параметров.
      * @return string 
      */
-    public function Render() {
+    public function Render($option = array()) {
         $this->setHeader($this->columns);
-        $this->setBody($this->render_table);
+        $this->setBody($this->render_table, $option);
         
         $html_table = $this->RenderTable();
         
