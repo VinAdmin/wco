@@ -140,7 +140,7 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
      * @param type $table
      * @return boolean
      */
-    public function insert(array $param, $table=null) {
+    public function insert(array $param, $table=null, $pdo = 0) {
         $insert = new ModelInsert();
         $table = empty($table) ? $this->init() : $table;
         $insert->Insert($table, $param);
@@ -149,7 +149,6 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
         try{
             $prepare = DB::connect()->prepare(self::getAssembly());
             $prepare->execute($insert->par);
-            $prepare = null;
             
             if(isset(DB::$config_db[DB::$connect_type_db])){
                 if(DB::$config_db[DB::$connect_type_db] == 'sqlite'){
@@ -157,7 +156,10 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
                 }
             }
             
-            return true;
+            $result = $prepare->fetch();
+            $prepare = null;
+             
+            return $result;
         } catch (\PDOException $ex) {
             echo  $ex;
             return false;
