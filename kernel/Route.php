@@ -100,17 +100,25 @@ class Route
             $controller->$action();
         }
         else{
-            Route::ErrorPage404(2);
+            Route::ErrorPage404($controller);
         }
     }
 
     /**
      * Выводит ошибку ненайдена страница.
      */
-    private function ErrorPage404($id)
+    private function ErrorPage404($controller)
     {
-        include_once(dirname($this->docRoot).'/vendor/vinadmin/wco/default_page/nopage.php');
-        exit();
+        header("HTTP/1.0 404 Not Found");
+        $this->action_name = 404;
+        $action = 'action'. ucfirst($this->action_name);
+        if(method_exists($controller, $action)){
+            // вызываем действие контроллера
+            $controller->$action();
+        }else{
+            include_once(dirname($this->docRoot).'/vendor/vinadmin/wco/default_page/nopage.php');
+            exit();
+        }
     }
     
     /**
