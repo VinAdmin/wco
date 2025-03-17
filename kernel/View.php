@@ -59,6 +59,8 @@ class View extends Heder
             $views = Route::$link_document . '/views' . $template_view;
         }
         
+        if (!file_exists($views))  throw new \Exception("Файл отсуствуес: " . $views);
+        
         include_once($views);
         $this->views = ob_get_contents();
         ob_end_clean();
