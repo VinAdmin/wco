@@ -141,13 +141,14 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
      * @return boolean
      */
     public function insert(array $param, $table=null, $pdo = 0) {
+        $connect = DB::connect();
         $insert = new ModelInsert();
         $table = empty($table) ? $this->init() : $table;
         $insert->Insert($table, $param);
         //var_dump(self::getAssembly());
         
         try{
-            $prepare = DB::connect()->prepare(self::getAssembly());
+            $prepare = $connect->prepare(self::getAssembly());
             $prepare->execute($insert->par);
             if(isset(DB::$config_db[DB::$connect_type_db])){
                 if(DB::$config_db[DB::$connect_type_db]['db'] == 'sqlite'){
