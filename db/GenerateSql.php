@@ -154,6 +154,8 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
                 if(DB::$config_db[DB::$connect_type_db]['db'] == 'sqlite'){
                     $this->LastId($table);
                 }elseif(DB::$config_db[DB::$connect_type_db]['db'] == 'mysql'){
+                    $stmt = $connect->query("SELECT LAST_INSERT_ID()");
+                    self::$lastId = $stmt->fetchColumn();
                     $result = $prepare;
                 }else {
                     $result = $prepare->fetch();
