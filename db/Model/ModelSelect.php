@@ -75,6 +75,13 @@ class ModelSelect extends Assembly{
         return $this;
     }
     
+    public function having(string $param) {
+        self::$where = ' HAVING '.$param.' ';
+        $sql = $this->sqlString();
+        self::setAssembly($sql);
+        return $this;
+    }
+    
     public function GroupBy(string $param) {
         self::$group_by = 'GROUP BY '.$param;
         $sql = $this->sqlString();
