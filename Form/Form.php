@@ -131,7 +131,7 @@ class Form {
     }
     
     private function selectOptionValue(array $params = array(),$selected = null) {
-        $option = '<option value="">Выбрать</option>';
+        $option = null;
         foreach ($params AS $value){
             $str_selected = ($selected == $value[0]) ? 'selected=""' : null;
             $option .= '<option '.$this->Value($value[0]).' '.$str_selected.'>'.$value[1].'</option>';
