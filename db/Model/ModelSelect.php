@@ -43,10 +43,12 @@ class ModelSelect extends Assembly{
         return new ModelSelect();
     }
     
-    public static function joinLeft(array $table, string $on, array $collums = null){
+    public function joinLeft(array $table, string $on, array $collums = null){
         $key = array_key_first($table);
         self::$collums .= (is_array($collums)) ? ','.self::ArrayToString($collums,$key) : null;
         self::$joinLeft .= ' LEFT JOIN '.$table[$key].' AS '.$key.' ON '.$on;
+        $sql = $this->sqlString();
+        self::setAssembly($sql);
         return new ModelSelect();
     }
     
@@ -56,10 +58,12 @@ class ModelSelect extends Assembly{
      * @param array $collums
      * @return \vadc\kernel\Model\ModelSelect
      */
-    public static function joinInner(array $table, string $on, array $collums = null){
+    public function joinInner(array $table, string $on, array $collums = null){
         $key = array_key_first($table);
         self::$collums .= (is_array($collums)) ? ','.self::ArrayToString($collums,$key) : null;
         self::$joinInner .= ' INNER JOIN '.$table[$key].' AS '.$key.' ON '.$on;
+        $sql = $this->sqlString();
+        self::setAssembly($sql);
         return new ModelSelect();
     }
     
@@ -114,6 +118,7 @@ class ModelSelect extends Assembly{
         $sql = self::$select.self::$collums.self::$from
             .self::$joinInner.self::$joinLeft.self::$where.self::$group_by
             .self::$order_by.self::$limit;
+        
         return $sql;
     }
     
