@@ -68,13 +68,16 @@ class Form {
      * @param type $selected Прараметр для выборки default null
      * @param array $options array(
      *                          'class' => 'По умолчанию класс form-control',
-     *                          'atr' => 'autofocus required')
+     *                          'atr' => 'autofocus required'
+     *                          'id' => 'element id')
      * @return BuildInput
      */
     public function Select(string $name,array $params = array(),$selected = null,array $options=array()) {
         $class = $this->Class($options);
-        $select = '<select name="'.$name.'" class="'.$class.'" '.$this->onchange($options).' '.$this->Atr($options).'>';
-        $select .= $this->SelectOptionValue($params,$selected);
+        $id = $name;
+        if(isset($options['id'])){ $id = $options['id']; }
+        $select = '<select name="'.$name.'" id="'.$id.'" class="'.$class.'" '.$this->onchange($options).' '.$this->Atr($options).'>';
+        $select .= $this->selectOptionValue($params,$selected);
         $select .= '</select>';
         
         return new BuildInput($select);
@@ -127,7 +130,7 @@ class Form {
         }
     }
     
-    private function SelectOptionValue(array $params = array(),$selected = null) {
+    private function selectOptionValue(array $params = array(),$selected = null) {
         $option = '<option value="">Выбрать</option>';
         foreach ($params AS $value){
             $str_selected = ($selected == $value[0]) ? 'selected=""' : null;
