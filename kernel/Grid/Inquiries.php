@@ -26,8 +26,10 @@ class Inquiries extends \wco\db\DB{
     }
     
     public function FatchTable(int $start, int $rows, $data = array()) {
-        if($this->col && $this->sort){
-            $this->model->order_by(''.$this->col.' '.$this->sort);
+        if($this->sort == 'DESC' || $this->sort == 'ASC') {
+            if($this->col && $this->sort){
+                $this->model->order_by(''.$this->col.' '.$this->sort);
+            }
         }
         
         $this->model->limit($start, $rows);

@@ -43,9 +43,11 @@ class Paginations {
         $getCol = strip_tags(filter_input(INPUT_GET, 'col'));
         $getSort = strip_tags(filter_input(INPUT_GET, 'sort'));
         
-        if($getCol && $getSort){
-            $data['col'] = $getCol;
-            $data['sort'] = $getSort;
+        if($getSort == 'DESC' || $getSort == 'ASC') {
+            if($getCol && $getSort){
+                $data['col'] = $getCol;
+                $data['sort'] = $getSort;
+            }
         }
         
         // Проверяем нужны ли стрелки назад

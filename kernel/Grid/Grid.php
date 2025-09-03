@@ -36,8 +36,11 @@ class Grid extends Table{
         
         $this->getCol = strip_tags(filter_input(INPUT_GET, 'col'));
         $this->getSort = strip_tags(filter_input(INPUT_GET, 'sort'));
-        $this->column = $this->getCol;
-        $this->sort = $this->getSort;
+        if($this->getSort == 'DESC' || $this->getSort == 'ASC') {
+            $this->column = $this->getCol;
+            $this->sort = $this->getSort;
+        }
+        
         parent::__construct($options);
     }
     
