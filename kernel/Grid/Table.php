@@ -80,11 +80,13 @@ class Table extends TableProperties{
             }else{
                 $params_url['sort'] = 'DESC';
             }
-            $url = WCO::Url('/'.$this->uri, $params_url);
             
-            $this->htmlHeader .= "\n\t\t\t\t<th class = \"coll\">\n"
-                    . "\t\t\t\t\t<a href=\"".$url."\">".$arr['name'].'</a>'
-                    . $this->FilterForm($arr['col'])
+            $url = WCO::Url('/'.$this->uri, $params_url);
+            $width = ($arr['width']) ? "width='" . $arr['width']."'" : "";
+            
+            $this->htmlHeader .= "\n\t\t\t\t<th class='coll'" . $width . ">\n"
+                . "\t\t\t\t\t<a href=\"".$url."\">".$arr['name'].'</a>'
+                . $this->FilterForm($arr['col'])
                 . "\t\t\t\t</th>\n";
             $this->col[] = $arr['col'];
         }

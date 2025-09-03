@@ -90,13 +90,18 @@ class Grid extends Table{
      * Устанавливает вывод одного указаного столбца а также алиас столбца.
      * @param string $column Запись столбца таблицы
      * @param string $aliace Альтернативное насвоние столбца.
+     * @param string $width Ширина столбца.
      * @return TableProperties
      */
-    public function setColumn(string $column, string $aliace=null) {
+    public function setColumn(string $column, string $aliace=null, $width = false) {
         if(is_null($aliace)){
             $aliace = $column;
         }
-        $this->columns[] = ['col'=> $column, 'name' => $aliace];
+        $this->columns[] = [
+            'col'=> $column,
+            'name' => $aliace,
+            'width'=> $width
+        ];
         
         return new TableProperties($column,$aliace);
     }
