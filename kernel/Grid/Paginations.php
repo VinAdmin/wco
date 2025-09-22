@@ -13,7 +13,8 @@ class Paginations {
     protected $total = null;
     public $uri = null;
     private $pervpage = null;
-    
+    public int $num = 0;
+            
     function __construct() {
         $this->page = filter_input(INPUT_GET, 'page');
     }
@@ -40,8 +41,8 @@ class Paginations {
         $nextpage = null;
         $page2left = null;
         $page1left = null;
-        $getCol = strip_tags(filter_input(INPUT_GET, 'col'));
-        $getSort = strip_tags(filter_input(INPUT_GET, 'sort'));
+        $getCol = WCO::safe_strip_tags(filter_input(INPUT_GET, 'col'));
+        $getSort = WCO::safe_strip_tags(filter_input(INPUT_GET, 'sort'));
         
         $filtered = array_filter($_GET);
         $data = [];

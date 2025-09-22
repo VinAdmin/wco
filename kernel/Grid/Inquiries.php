@@ -20,6 +20,7 @@ class Inquiries extends \wco\db\DB{
     private $col;
     private $sort;
     private $model;
+    public int $offset = 0;
             
     function __construct($model){
         $this->model = $model;

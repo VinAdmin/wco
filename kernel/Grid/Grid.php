@@ -16,7 +16,7 @@ use wco\db\DB;
  * @property string $uri Пока для контроллера
  */
 class Grid extends Table{
-    public $rows = 25;
+    public int $rows = 25;
 
     private $count = null;
     private $render_table = null;
@@ -24,6 +24,7 @@ class Grid extends Table{
     private $Inquiries = null;
     private $getCol;
     private $getSort;
+    public int $offset = 0;
     
     /**
      * @param array $options array('get'=>'','action_edit'=>'name')
@@ -34,8 +35,8 @@ class Grid extends Table{
             '/default/font-awesome-4.7.0/css/font-awesome.css'
         ]);
         
-        $this->getCol = strip_tags(filter_input(INPUT_GET, 'col'));
-        $this->getSort = strip_tags(filter_input(INPUT_GET, 'sort'));
+        $this->getCol = WCO::safe_strip_tags(filter_input(INPUT_GET, 'col'));
+        $this->getSort = WCO::safe_strip_tags(filter_input(INPUT_GET, 'sort'));
         if($this->getSort == 'DESC' || $this->getSort == 'ASC') {
             $this->column = $this->getCol;
             $this->sort = $this->getSort;

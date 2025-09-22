@@ -45,7 +45,7 @@ class Table extends TableProperties{
      */
     function __construct($options=array()) {
         $this->paginations = new Paginations();
-        $this->page = strip_tags(filter_input(INPUT_GET,'page'));
+        $this->page = WCO::safe_strip_tags(filter_input(INPUT_GET,'page'));
         
         if(!isset($options['edit'])){
             $this->options['edit'] = true;

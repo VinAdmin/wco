@@ -12,7 +12,7 @@ use wco\kernel\WCO;
 
 class Heder
 {
-    public $title = null;
+    public $title = '';
     public $description = null;
     public $keywords = null;
     public $image = false;
@@ -33,9 +33,9 @@ class Heder
     {
         $httpDomain = WCO::$config['protocol'] . filter_input(INPUT_SERVER, 'SERVER_NAME') . filter_input(INPUT_SERVER, 'REQUEST_URI');
         $search = array("\r\n", "\r", "\n"); 
-        $this->title = strip_tags(str_replace($search,'',strip_tags($this->title)));
-        $this->description = strip_tags(str_replace($search,'',strip_tags($this->description)));
-        $this->keywords = strip_tags(str_replace($search,'',strip_tags($this->keywords)));
+        $this->title = strip_tags(str_replace($search,'', WCO::safe_strip_tags($this->title)));
+        $this->description = strip_tags(str_replace($search,'', WCO::safe_strip_tags($this->description)));
+        $this->keywords = strip_tags(str_replace($search,'', WCO::safe_strip_tags($this->keywords)));
         
         $head = $this->getTitle();
         $head .= "\t\t<link data-vue-meta=\"ssr\" href=\"$httpDomain\" rel=\"canonical\" data-vmid=\"canonical\">".PHP_EOL;

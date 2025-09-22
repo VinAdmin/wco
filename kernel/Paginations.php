@@ -88,7 +88,7 @@ class Paginations extends ModelSqlPagination{
 }
 
 class ModelSqlPagination{
-    public $num = 25;
+    public int $num = 25;
     public $uri = null;
     protected $sql = null;
     protected $total = null;

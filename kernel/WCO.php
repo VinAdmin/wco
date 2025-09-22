@@ -36,8 +36,8 @@ class WCO
         }
         
         self::$domain = filter_input(INPUT_SERVER, 'HTTP_HOST');
-        self::$doc_root = strip_tags(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT'));
-        self::$request_uri = strip_tags(filter_input(INPUT_SERVER, 'REQUEST_URI'));
+        self::$doc_root = self::safe_strip_tags(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT'));
+        self::$request_uri = self::safe_strip_tags(filter_input(INPUT_SERVER, 'REQUEST_URI'));
     }
     
     private function LoadConfig() {
@@ -236,5 +236,14 @@ class WCO
         }else{
             return self::$config['domain_alias'][$domain];
         }
+    }
+    
+    public static function safe_strip_tags($value, $allowed_tags = ''): string
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        return strip_tags((string)$value, $allowed_tags);
     }
 }
