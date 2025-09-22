@@ -94,19 +94,21 @@ class Grid extends Table{
      * @param string $column Запись столбца таблицы
      * @param string $aliace Альтернативное насвоние столбца.
      * @param string $width Ширина столбца.
+     * @param array  $list Список
      * @return TableProperties
      */
-    public function setColumn(string $column, string $aliace=null, $width = false) {
+    public function setColumn(string $column, string $aliace=null, $width = false, array $list = []) {
         if(is_null($aliace)){
             $aliace = $column;
         }
         $this->columns[] = [
-            'col'=> $column,
-            'name' => $aliace,
-            'width'=> $width
+            'col'   => $column,
+            'name'  => $aliace,
+            'width' => $width,
+            'list'  => $list,
         ];
         
-        return new TableProperties($column,$aliace);
+        return new TableProperties($column, $aliace);
     }
     
     /**

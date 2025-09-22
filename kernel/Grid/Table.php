@@ -37,7 +37,8 @@ class Table extends TableProperties{
     private $options;
     
     protected $paginations;
-    
+    protected array $list = [];
+
     /**
      * 
      * @param type $options
@@ -74,7 +75,9 @@ class Table extends TableProperties{
         }
         if(!$col){return;}
         foreach ($col as $col_num => $arr){
+            $this->list[$arr['col']] = $arr['list'];
             $params_url['col'] = $arr['col'];
+            
             if($this->sort == 'DESC'){
                 $params_url['sort'] ='ASC';
             }else{
@@ -109,7 +112,9 @@ class Table extends TableProperties{
                 $col = explode('.', $key_col);
                 $additional = (isset(self::$additional_text[$key_col])) ? self::$additional_text[$key_col] : '';
                 $end = end($col);
-                $this->htmlBody .= '<td '.self::getValign().' class="td_grid">'  . $additional .$arr[$end] . '</td>';
+                $tdText = (isset($this->list[$key_col][$arr[$end]])) ? $this->list[$key_col][$arr[$end]] : $arr[$end];
+                
+                $this->htmlBody .= '<td '.self::getValign().' class="td_grid">'  . $additional . $tdText . '</td>';
             }
             $this->htmlBody .= '<td valign="top" width="100">'.$this->Link(array_shift($arr), $options).'</td>';
             $this->htmlBody .= '</tr>';
