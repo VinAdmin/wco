@@ -136,11 +136,13 @@ class Table extends TableProperties{
             $url_delete = '';
             
             if(isset($options['delete'])){ $url_delete = '&'.http_build_query($options['delete']); }
-            $link .= '<a onClick="return confirm(\'Вы подтверждаете удаление?\');"'
-                . ' href="'.WCO::Url('/?option='.$this->uri.'&action='.$this->action_delete, [$this->id => $id]).$url_delete.'" title="Удалить" '
-                . 'style="margin-right:5px;"'
-                . ' class="btn btn-danger">'
-                . '<i class="fa fa-trash" aria-hidden="true"></i></a>';
+            if($this->action_delete == true){
+                $link .= '<a onClick="return confirm(\'Вы подтверждаете удаление?\');"'
+                    . ' href="'.WCO::Url('/?option='.$this->uri.'&action='.$this->action_delete, [$this->id => $id]).$url_delete.'" title="Удалить" '
+                    . 'style="margin-right:5px;"'
+                    . ' class="btn btn-danger">'
+                    . '<i class="fa fa-trash" aria-hidden="true"></i></a>';
+            }
         }else{ $link = null; }
         
         return  $link;
