@@ -2,10 +2,10 @@
 /**
  * Описание класса: Главная въюшка.
  *
- * @package    Vadc
+ * @package    WCO
  * @subpackage View
  * @author     Ольхин Виталий <volkhin@texnoblog.uz>
- * @copyright  (C) 2022
+ * @copyright  (C) 2022-2025
  */
 namespace wco\kernel;
 
@@ -18,13 +18,16 @@ class View extends Heder
     private $path_to_domain = null;
     
     function __construct() {
-        $usetAut = new \app\models\User();
-        if(!wco::Login()){
-            $aut = $usetAut->Authorisation();
-        } 
-        
-        if(!wco::Login()){
-            $aut = $usetAut->Authorisation();
+        //Проверка на существование класса пользователя
+        if (class_exists('\app\models\User')) {
+            $usetAut = new \app\models\User();
+            if(!wco::Login()){
+                $aut = $usetAut->Authorisation();
+            } 
+
+            if(!wco::Login()){
+                $aut = $usetAut->Authorisation();
+            }
         }
         
         if(isset($_GET['logout'])){
