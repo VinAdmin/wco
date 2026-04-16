@@ -18,7 +18,7 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
             
     function __construct() {
         //Мдель выборки Select
-        $this->modelSelect = new ModelSelect();
+        $this->modelSelect = new ModelSelect($this->init());
     }
     
     /**
@@ -36,15 +36,15 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
      */
     public function select($param = null) {
         $this->modelSelect->select($param);
-        return new ModelSelect($this->init());
+        return $this->modelSelect;
     }
     
     /**
      * Собирает запрос SELECT
      */
     public function from() {
-        $this->modelSelect->form($this->init());
-        return new ModelSelect();
+        $this->modelSelect->from($this->init());
+        return $this->modelSelect;
     }
     
     /**
@@ -58,7 +58,7 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
             $prepare->execute($params);
             $return = $prepare->fetch(\PDO::FETCH_ASSOC);
             $prepare = null;
-            ModelSelect::Clear();
+            
             return $return;
         } catch (\PDOException $ex) {
             echo "<span style=\"color: blue\">".self::getAssembly().'</span>';
@@ -79,7 +79,7 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
             $prepare->execute($params);
             $return = $prepare->fetchAll($pdo);
             $prepare = null;
-            ModelSelect::Clear();
+            
             return $return;
         } catch (\PDOException $ex) {
             echo '<div style="color: blue;">'.self::getAssembly().'</div>';
@@ -95,7 +95,7 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
             $prepare->execute($params);
             $return = $prepare->fetchColumn();
             $prepare = null;
-            ModelSelect::Clear();
+            
             return $return;
         } catch (\PDOException $ex) {
             echo '<div style="color: blue;">'.self::getAssembly().'</div>';
