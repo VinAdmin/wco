@@ -12,7 +12,7 @@ use wco\db\DB;
  */
 class ModelSelect extends Assembly{
     private $table = null;
-    private $collums = null;
+    private $columns = null;
     private $joinLeft = [];
     private $joinInner = [];
     private $where = null;
@@ -46,9 +46,9 @@ class ModelSelect extends Assembly{
         return $this;
     }
     
-    public function joinLeft(array $table, string $on, ?array $collums = null): self{
+    public function joinLeft(array $table, string $on, ?array $columns = null): self{
         $key = array_key_first($table);
-        $this->collums .= (is_array($collums)) ? ','.self::ArrayToString($collums,$key) : null;
+        $this->$columns .= (is_array($columns)) ? ','.self::ArrayToString($columns, $key) : null;
         $this->joinLeft[] = ' LEFT JOIN '.$table[$key].' AS '.$key.' ON '.$on;
         $sql = $this->sqlString();
         self::setAssembly($sql);
@@ -62,9 +62,9 @@ class ModelSelect extends Assembly{
      * @param array $collums
      * @return \vadc\kernel\Model\ModelSelect
      */
-    public function joinInner(array $table, string $on, ?array $collums = null): self{
+    public function joinInner(array $table, string $on, ?array $columns = null): self{
         $key = array_key_first($table);
-        $this->collums .= (is_array($collums)) ? ','.self::ArrayToString($collums,$key) : null;
+        $this->columns .= (is_array($columns)) ? ',' . self::ArrayToString($columns,$key) : null;
         $this->joinInner[] = ' INNER JOIN '.$table[$key].' AS '.$key.' ON '.$on;
         $sql = $this->sqlString();
         self::setAssembly($sql);
@@ -127,17 +127,17 @@ class ModelSelect extends Assembly{
         $joinInner = implode(' ', $this->joinInner);
         $joinLeft = implode(' ', $this->joinLeft);
         
-        $sql = $this->select.$this->collums.$this->from
+        $sql = $this->select.$this->columns.$this->from
             .$joinInner.$joinLeft.$this->where.$this->group_by
             .$this->order_by.$this->limit;
         
         return $sql;
     }
     
-    public static function ArrayToString(array $collums) {
+    public static function ArrayToString(array $columns) {
         $str = null;
-        if(is_array($collums)){
-            foreach ($collums as $key=>$col){
+        if(is_array($columns)){
+            foreach ($columns as $key=>$col){
                 if(substr_count($col,'.')){
                     $arr_col = explode('.', $col);
                     $str_col = ''.$arr_col[0].'.'.$arr_col[1].'';
