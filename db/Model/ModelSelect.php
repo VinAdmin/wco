@@ -22,7 +22,7 @@ class ModelSelect extends Assembly{
     public $order_by = null;
     public $limit = null;
     
-    function __construct(string $table = null) {
+    function __construct(?string $table = null) {
         $this->table = $table;
     }
     
@@ -37,7 +37,7 @@ class ModelSelect extends Assembly{
      * @param string $table
      * @return ModelSelect
      */
-    public function from(string $table = null): ModelSelect {
+    public function from(?string $table = null): self {
         $table = (!is_null($table)) ? $table : $this->table;
         $this->from = ' FROM '.$table.' AS t1';
         $sql = $this->sqlString();
@@ -46,7 +46,7 @@ class ModelSelect extends Assembly{
         return $this;
     }
     
-    public function joinLeft(array $table, string $on, array $collums = null){
+    public function joinLeft(array $table, string $on, ?array $collums = null): self{
         $key = array_key_first($table);
         $this->collums .= (is_array($collums)) ? ','.self::ArrayToString($collums,$key) : null;
         $this->joinLeft[] = ' LEFT JOIN '.$table[$key].' AS '.$key.' ON '.$on;
@@ -62,7 +62,7 @@ class ModelSelect extends Assembly{
      * @param array $collums
      * @return \vadc\kernel\Model\ModelSelect
      */
-    public function joinInner(array $table, string $on, array $collums = null){
+    public function joinInner(array $table, string $on, ?array $collums = null): self{
         $key = array_key_first($table);
         $this->collums .= (is_array($collums)) ? ','.self::ArrayToString($collums,$key) : null;
         $this->joinInner[] = ' INNER JOIN '.$table[$key].' AS '.$key.' ON '.$on;
@@ -134,7 +134,7 @@ class ModelSelect extends Assembly{
         return $sql;
     }
     
-    public static function ArrayToString(array $collums = null,$as) {
+    public static function ArrayToString(array $collums) {
         $str = null;
         if(is_array($collums)){
             foreach ($collums as $key=>$col){
@@ -148,7 +148,6 @@ class ModelSelect extends Assembly{
                 if(is_string($key)){
                     $str .= ''.$str_col.' AS '.$key.',';
                 }else{
-                    //$str .= $as.'.'.$col.',';
                     $str .= $str_col.',';
                 }
             }

@@ -223,7 +223,7 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
      * );
      * ```
      */
-    public function Update(array $columns, string $where, string $from=null) {
+    public function Update(array $columns, string $where, ?string $from = null): bool {
         $modelUpdate = new ModelUpdate();
         if(empty($from)){
             $from = $this->init();
@@ -335,7 +335,7 @@ abstract class GenerateSql extends Assembly implements interfaceDB{
      * $stmt->execute([':id' => 1]);
      * ```
      */
-    public function delete($where = null, string $from = null) {
+    public function delete(?string $where = null, ?string $from = null) {
         $modelDelete = new ModelDelete();
         if(empty($from)){
             $from = $this->init();
@@ -448,7 +448,7 @@ interface interfaceDB{
      * @param string|null $from Имя таблицы
      * @return bool Результат выполнения
      */
-    public function Update(array $columns, string $where, string $from = null);
+    public function Update(array $columns, string $where, ?string $from = null);
 
     /**
      * Вставка новой записи в таблицу
@@ -465,7 +465,7 @@ interface interfaceDB{
      * @param string|null $from Имя таблицы
      * @return \PDOStatement|null Объект подготовленного запроса
      */
-    public function delete($where = null, string $from = null);
+    public function delete(?string $where = null, ?string $from = null);
 
     /**
      * Вставка или обновление записи (upsert)
