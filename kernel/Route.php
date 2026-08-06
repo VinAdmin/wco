@@ -8,7 +8,7 @@ use wco\kernel\WCO;
  * 
  * @author     Ольхин Виталий <volkhin@texnoblog.uz, ovvitalik@gmail.com>
  * @link       http://texnoblog.uz/
- * @copyright  (C) 2022
+ * @copyright  (C) 2022 - 2026
  * @access public
  * @property string $controller_name Контроллер и действие по умолчанию
  * @property string $action_name Экшен по умолчанию
@@ -17,79 +17,102 @@ use wco\kernel\WCO;
  */
 class Route
 {
+    /** @var string Имя контроллера по умолчанию. */
     public $controller_name = 'SiteController';
+    /** @var string Имя экшена по умолчанию. */
     private $action_name =  'index';
+    /** @var string|null Корень директории (DOCUMENT_ROOT). */
     private $docRoot = null;
+    /** @var string|null Адресная строка запроса (REQUEST_URI). */
     private $serverUri = null;
+    /** @var string|null GET-параметр option. */
     private $getOption = null;
+    /** @var string|null GET-параметр action. */
     private $getAction = null;
+    /** @var string|null Путь к файлу контроллера. */
     private $controller_path = null;
+    /** @var string Контроллер по умолчанию. */
     private const CONTROLLER_DEFAULT = 'SiteController';
+    /** @var string|null Путь к корню директории модулей сайта. */
     public static $link_document = null;
             
+    /**
+     * Конструктор. Фильтрует входные данные, получает URI и подключает
+     * конфигурацию домена.
+     */
     function __construct() {
         $this->Filtr();
         $this->getUri();
         if(is_null(self::$link_document)){
-            $domain_confug = dirname($this->docRoot) . "/domain/".WCO::gatDomainAlias(WCO::$domain)."/config.php";
+            $domain_config = dirname($this->docRoot) . "/domain/".WCO::gatDomainAlias(WCO::$domain)."/config.php";
         } else {
-            $domain_confug = self::$link_document . "/config.php";
+            $domain_config = self::$link_document . "/config.php";
         }
         
-        if(file_exists($domain_confug)){
-            include_once $domain_confug;
+        if(file_exists($domain_config)){
+            include_once $domain_config;
         }
     }
     
-    private function loadContriller() {
+    /**
+     * Определяет контроллер и экшен из адресной строки и подключает
+     * файл с классом контроллера. Если контроллер не найден,
+     * подгружается контроллер по умолчанию.
+     * 
+     * @return void
+     */
+    private function loadContriller(): void {
         if($this->getModules() && WCO::$request_uri){
             $uri = preg_split('/\/|\?/', WCO::$request_uri);
-            if(isset($uri[2])) { $this->controller_name = ucfirst($uri[2]).'Controller';}
+            
+            if(isset($uri[2])) { $this->controller_name = ucfirst($uri[2]) . 'Controller'; }
             $this->action_name = isset($uri[3]) ? $this->searchUrlValue($uri[3]) : 'index';
         }
         
         // подцепляем файл с классом контроллера
-        $this->controller_path = dirname($this->docRoot).'/domain/'.WCO::gatDomainAlias(WCO::$domain).$this->getModules() . "/controllers/" 
-                . $this->controller_name.'.php';
+        $this->controller_path = dirname($this->docRoot).'/domain/' 
+                . WCO::gatDomainAlias(WCO::$domain).$this->getModules() 
+                . "/controllers/" . $this->controller_name . '.php';
         
         //Путь подключения корню директории модулей сайта.
         self::$link_document = dirname($this->docRoot) . "/domain/" 
-                    . WCO::gatDomainAlias(WCO::$domain).$this->getModules();
+                . WCO::gatDomainAlias(WCO::$domain) 
+                . $this->getModules();
         
-        //var_dump($this->controller_path);exit();
-        //Проверка контроллера
-        if(file_exists($this->controller_path)){ //Емли контроллер не существует используем по умолчанию
+        if(file_exists($this->controller_path)){
             include_once $this->controller_path;
+            return;
         }
-        else{
-            /**
-             * Если не один контроллер не найден попытка подгрузить контроллер 
-             * по умолчанию.
-             */
-            $this->controller_name = self::CONTROLLER_DEFAULT;
-            
-            $this->controller_path = dirname($this->docRoot).'/domain/'.WCO::gatDomainAlias(WCO::$domain).$this->getModules() . "/controllers/" 
-                . $this->controller_name. '.php';
-            include_once $this->controller_path;
-            if(WCO::$request_uri){
-                $uri = preg_split('/\/|\?/', WCO::$request_uri);
-                if(isset($uri[1])) { $this->action_name = $uri[1]; }
-            }
-            
-            if($this->getModules() && WCO::$request_uri){
-                $uri = preg_split('/\/|\?/', WCO::$request_uri);
-                if(isset($uri[2])) { $this->action_name = $uri[2];}
-            }
-            
-            //var_dump($this->action_name);exit();
+        
+        /**
+         * Если не один контроллер не найден попытка подгрузить контроллер 
+         * по умолчанию.
+         */
+        $this->controller_name = self::CONTROLLER_DEFAULT;
+
+        $this->controller_path = dirname($this->docRoot).'/domain/'.WCO::gatDomainAlias(WCO::$domain).$this->getModules() . "/controllers/" 
+            . $this->controller_name. '.php';
+        include_once $this->controller_path;
+        if(WCO::$request_uri){
+            $uri = preg_split('/\/|\?/', WCO::$request_uri);
+            if(isset($uri[1])) { $this->action_name = $uri[1]; }
         }
+
+        if($this->getModules() && WCO::$request_uri){
+            $uri = preg_split('/\/|\?/', WCO::$request_uri);
+            if(isset($uri[2])) { $this->action_name = $uri[2]; }
+        }
+
+        return;
     }
 
     /**
-     * Запускает контролле и запрашиваемый экшен контроллера.
+     * Запускает контроллер и запрашиваемый экшен контроллера.
+     * Если метод экшена не найден, выводит страницу 404.
+     * 
+     * @return void
      */
-    public function run()
-    {
+    public function run() {
         $this->loadContriller();
         // создаем контроллер
         $controller = new $this->controller_name;
@@ -105,10 +128,14 @@ class Route
     }
 
     /**
-     * Выводит ошибку ненайдена страница.
+     * Выводит ошибку «страница не найдена» (HTTP 404).
+     * Если у контроллера нет экшена action404, подключается
+     * страница по умолчанию.
+     * 
+     * @param object $controller Объект контроллера.
+     * @return void
      */
-    private function ErrorPage404($controller)
-    {
+    private function ErrorPage404($controller) {
         header("HTTP/1.0 404 Not Found");
         $this->action_name = 404;
         $action = 'action'. ucfirst($this->action_name);
@@ -123,43 +150,58 @@ class Route
     
     /**
      * Получает адрес и обрабатывает запросы для перенаправления.
+     * Разбирает URI на контроллер и экшен, определяет модуль.
+     * 
+     * @return void
      */
     private function getUri() {
         $key_action = null;
+        $arr_uri = [];
+        
         (string)$uri = \strip_tags($this->serverUri); $pos = [];
         preg_match('(%27)',$uri,$pos);
+        
         if($pos == true){
             header('Location: /');
             exit;
-        } $arr_uri = [];
-        if(\preg_match_all('#/([a-z]+)#su', $uri, $arr_uri)){
+        }
+        
+        if(\preg_match_all('#/([A-Za-z]+)#su', $uri, $arr_uri)){
             //var_dump($arr_uri);exit();
             if(!$this->LoadModules(self::ParserUriModules())){
                 $controller = ($arr_uri[1][0] != 'index') ? $arr_uri[1][0] : null;
                 $key_action = 1;
             }
+            
             if(isset($arr_uri[1][1])){
                 $controller = ($arr_uri[1][0] != 'index') ? $arr_uri[1][0] : null;
                 $key_action = 1;
             }
         }else{ $controller = 'Site'; }
+        
         //Если существует массив
         if(isset($arr_uri[1][$key_action])){
             $action = end($arr_uri[1]);
         }
+        
         //Если не пуст получаем имя контроллера
-        //var_dump($controller);
         if(!empty($controller)){
             $this->controller_name = !empty($this->getOption) ? strip_tags($this->getOption) 
                     . 'Controller' : ucfirst($controller).'Controller';
         }
+        
         // получаем имя экшена
         if (!empty($action) || !empty($this->getAction)){
             $this->action_name = !empty($this->getAction) ? strip_tags($this->getAction) : $action;
         }
-        //var_dump($this->controller_name);
     }
     
+    /**
+     * Фильтрует входные данные: корень директории, URI запроса
+     * и GET-параметры option/action.
+     * 
+     * @return void
+     */
     private function Filtr() {
         $this->docRoot = filter_input(INPUT_SERVER, 'DOCUMENT_ROOT');
         $this->serverUri = filter_input(INPUT_SERVER, 'REQUEST_URI');
@@ -169,7 +211,11 @@ class Route
     
     /**
      * Подключение модуля к пути контроллера.
-     * @return string
+     * Проверяет наличие модуля в конфигурации и устанавливает путь
+     * к контроллеру модуля (в том числе для модуля ядра wco).
+     * 
+     * @return string|false Путь к файлу контроллера модуля или false,
+     *                      если модуль не найден.
      */
     private function LoadModules() {
         //Доступ к контролеру ядра.
@@ -203,9 +249,10 @@ class Route
     }
     
     /**
-     * Порсер ищит прервый параметр из адресной сторики и возвращает его результат.
+     * Парсер ищет первый параметр из адресной строки и возвращает его результат.
      * 
-     * @return string Если результат ложный возвращает 0.
+     * @return string|int Имя модуля из адресной строки. Если результат
+     *                    ложный, возвращает 0.
      */
     static function ParserUriModules() {
         if(WCO::$request_uri){
@@ -219,6 +266,12 @@ class Route
         return 0;
     }
     
+    /**
+     * Проверяет наличие папки модуля по первому параметру адресной строки.
+     * 
+     * @return string|false Путь к папке модуля («/modules/имя») или false,
+     *                      если модуль не найден.
+     */
     private function getModules() {
         if(WCO::$request_uri){
             $uri = preg_split('/\/|\?/', WCO::$request_uri);
@@ -234,6 +287,13 @@ class Route
         return false;
     }
     
+    /**
+     * Возвращает значение параметра, если в нём нет знака «=».
+     * Иначе возвращает имя экшена по умолчанию.
+     * 
+     * @param string $param Параметр адресной строки.
+     * @return string Значение параметра или «index».
+     */
     private function searchUrlValue($param) {
         if (stristr($param, '=') === FALSE) {
             return $param;
